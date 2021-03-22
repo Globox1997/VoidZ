@@ -3,7 +3,9 @@
   "minVersion": "0.8",
   "package": "net.voidz.mixin",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [],
+  "mixins": [
+    "PlayerEntityMixin"
+  ],
   "client": [
     "MinecraftClientMixin"
   ],
