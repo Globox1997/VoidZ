@@ -1,9 +1,8 @@
-# Fabric Example Mod
+# VoidZ
+VoidZ is an addon for the AdventureZ mod.
 
-## Setup
+### Installation
+VoidZ is a mod built for the [Fabric Loader](https://fabricmc.net/). It requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) and AdventureZ (https://www.curseforge.com/minecraft/mc-mods/adventurez) to be installed separately.
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+### License
+VoidZ is licensed under GLPv3.
