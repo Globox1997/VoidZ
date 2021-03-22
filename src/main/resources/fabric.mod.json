@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "voidz",
+  "version": "1.0.0",
+  "name": "VoidZ",
+  "description": "Void addon for the AdventureZ mod",
+  "authors": [
+    "Globox_Z"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/voidz",
+    "sources": "https://github.com/Globox1997/VoidZ"
+  },
+  "license": "GPLv3",
+  "icon": "assets/voidz/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.voidz.VoidMain"
+    ]
+  },
+  "mixins": [
+    "voidz.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.7.4",
+    "fabric": "*",
+    "minecraft": "1.16.x"
+  },
+  "suggests": {
+    "another-mod": "*"
+  },
+  "accessWidener": "voidz.aw"
+}
