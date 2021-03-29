@@ -23,4 +23,13 @@ public class PlayerEntityMixin {
         }
     }
 
+    @Inject(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"), cancellable = true)
+    public void checkFallFlyingMixin(CallbackInfoReturnable<Boolean> info) {
+        PlayerEntity playerEntity = (PlayerEntity) (Object) this;
+        if (playerEntity != null && !playerEntity.isCreative() && playerEntity.world.getDimension().equals(
+                playerEntity.world.getRegistryManager().getDimensionTypes().get(new Identifier("voidz:void_type")))) {
+            info.setReturnValue(false);
+        }
+    }
+
 }
