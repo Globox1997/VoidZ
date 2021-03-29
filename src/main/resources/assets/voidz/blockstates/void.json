@@ -1,7 +1,10 @@
 {
     "variants": {
-        "": {
+        "activated_void=false": {
             "model": "voidz:block/void"
+        },
+        "activated_void=true": {
+            "model": "voidz:block/activated_void"
         }
     }
 }
