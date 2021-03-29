@@ -8,15 +8,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.voidz.block.PortalBlock;
-import net.voidz.block.VoidBlock;
+import net.voidz.block.*;
 import net.voidz.block.entity.PortalBlockEntity;
 
 public class BlockInit {
         // Block
         public static final PortalBlock PORTAL_BLOCK = new PortalBlock();
         public static final VoidBlock VOID_BLOCK = new VoidBlock(FabricBlockSettings.copy(Blocks.END_STONE));
-        public static final VoidBlock INFESTED_VOID_BLOCK = new VoidBlock(FabricBlockSettings.copy(Blocks.END_STONE));
+        public static final InfestedVoidBlock INFESTED_VOID_BLOCK = new InfestedVoidBlock(
+                        FabricBlockSettings.copy(Blocks.END_STONE));
         // Entity
         public static BlockEntityType<PortalBlockEntity> PORTAL_BLOCK_ENTITY;
 
