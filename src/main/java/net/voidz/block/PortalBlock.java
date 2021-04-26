@@ -1,5 +1,8 @@
 package net.voidz.block;
 
+import java.util.List;
+
+import net.adventurez.entity.VoidShadowEntity;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -7,12 +10,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.voidz.block.entity.PortalBlockEntity;
@@ -35,6 +40,16 @@ public class PortalBlock extends Block implements BlockEntityProvider {
 		if (!world.isClient) {
 			ServerWorld serverWorld = (ServerWorld) playerEntity.getEntityWorld();
 			if (serverWorld.getRegistryKey() == DimensionInit.VOID_WORLD) {
+				Box box = new Box(blockPos);
+				List<VoidShadowEntity> list = world.getEntitiesByClass(VoidShadowEntity.class, box.expand(160D),
+						EntityPredicates.EXCEPT_SPECTATOR);
+				if (!playerEntity.isCreative() && !playerEntity.isSpectator() && !list.isEmpty()) {
+					playerEntity.sendMessage(
+							new LiteralText(
+									"Void Shadow: You can't escape the depths of this world as long as I am alive!"),
+							false);
+					return ActionResult.FAIL;
+				}
 				ServerWorld overworld = serverWorld.getServer().getWorld(World.OVERWORLD);
 				FabricDimensions.teleport(playerEntity, overworld, VoidPlacementHandler.leave(overworld, blockPos));
 			} else {
