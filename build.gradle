@@ -27,10 +27,17 @@ dependencies {
 
 	//AdventureZ
 	modImplementation("com.github.Globox1997:AdventureZ:1.2.3") {
-      exclude(group: "net.fabricmc.fabric-api")
-	  exclude(group: "vazkii.patchouli")
-	  exclude(group: "io.github.prospector")
-	  exclude(module:"VoidZ")
+    	exclude(group: "net.fabricmc.fabric-api")
+		exclude(group: "vazkii.patchouli")
+		exclude(group: "io.github.prospector")
+		exclude(module:"VoidZ")
+  	}
+	//DisableCustomWorldsAdvice
+	modCompile 'com.github.rdvdev2:DisableCustomWorldsAdvice:v1.2', {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	include 'com.github.rdvdev2:DisableCustomWorldsAdvice:v1.2', {
+    	exclude(group: "net.fabricmc.fabric-api")
   	}
 }
 
