@@ -43,7 +43,7 @@ public class VoidPlacementHandler {
 		if (world.getBlockState(pos).getBlock() != BlockInit.PORTAL_BLOCK) {
 			BlockState platformBlock = BlockInit.VOID_BLOCK.getDefaultState();
 			for (float u = 0.0F; u < Math.PI * 2; u += (float) Math.PI / 256F) {
-				for (int i = 0; i < 60; i++) {
+				for (int i = 0; i < 40; i++) {
 					world.setBlockState(pos.add(Math.sin(u) * i, 0, Math.cos(u) * i), platformBlock);
 				}
 			}
