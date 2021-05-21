@@ -27,8 +27,7 @@ public class VoidPlacementHandler {
 	private static BlockPos enterVoid(ServerWorld serverWorld, BlockPos portalPos) {
 		BlockPos spawnPos = new BlockPos(portalPos.getX(), 100, portalPos.getZ());
 		spawnVoidPlatform(serverWorld, spawnPos.down());
-		VoidShadowEntity voidShadowEntity = (VoidShadowEntity) EntityInit.VOID_SHADOW_ENTITY
-				.create((ServerWorld) serverWorld);
+		VoidShadowEntity voidShadowEntity = (VoidShadowEntity) EntityInit.VOID_SHADOW_ENTITY.create((World) serverWorld);
 		voidShadowEntity.setVoidMiddle(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
 		((Entity) voidShadowEntity).refreshPositionAndAngles(spawnPos.up().north(60), 0.0F, 0.0F);
 		((ServerWorld) serverWorld).spawnEntity(voidShadowEntity);
