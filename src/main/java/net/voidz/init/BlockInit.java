@@ -9,7 +9,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.voidz.block.*;
-import net.voidz.block.entity.PortalBlockEntity;
+import net.voidz.block.entity.*;
 
 public class BlockInit {
         // Block
@@ -19,6 +19,7 @@ public class BlockInit {
                         FabricBlockSettings.copy(Blocks.END_STONE));
         // Entity
         public static BlockEntityType<PortalBlockEntity> PORTAL_BLOCK_ENTITY;
+        public static BlockEntityType<VoidBlockEntity> VOID_BLOCK_ENTITY;
 
         public static void init() {
                 // Block
@@ -34,6 +35,8 @@ public class BlockInit {
                 // Entity
                 PORTAL_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, "voidz:void_portal_entity",
                                 BlockEntityType.Builder.create(PortalBlockEntity::new, PORTAL_BLOCK).build(null));
+                VOID_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, "voidz:void_block_entity",
+                                BlockEntityType.Builder.create(VoidBlockEntity::new, VOID_BLOCK).build(null));
         }
 
 }
