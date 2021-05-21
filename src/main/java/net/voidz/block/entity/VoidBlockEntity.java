@@ -16,9 +16,14 @@ public class VoidBlockEntity extends BlockEntity implements Tickable {
     public void tick() {
         if (!this.world.isClient && this.getCachedState().get(VoidBlock.ACTIVATED)) {
             ticker++;
-            if (ticker % 10 == 0 && this.getCachedState().get(VoidBlock.DESTROYTIME) < 7) {
-                this.world.setBlockState(pos, this.getCachedState().with(VoidBlock.ACTIVATED, true)
-                        .with(VoidBlock.DESTROYTIME, this.getCachedState().get(VoidBlock.DESTROYTIME) + 1));
+            if (ticker % 10 == 0) {
+                if (this.getCachedState().get(VoidBlock.DESTROYTIME) == 7) {
+                    this.world.breakBlock(pos, false);
+                }
+                if (this.getCachedState().get(VoidBlock.DESTROYTIME) < 7) {
+                    this.world.setBlockState(pos, this.getCachedState().with(VoidBlock.ACTIVATED, true)
+                            .with(VoidBlock.DESTROYTIME, this.getCachedState().get(VoidBlock.DESTROYTIME) + 1));
+                }
             }
         }
 

@@ -2,12 +2,16 @@ package net.voidz.block;
 
 import java.util.Random;
 
+import org.jetbrains.annotations.Nullable;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -31,6 +35,14 @@ public class VoidBlock extends Block implements BlockEntityProvider {
     @Override
     public BlockEntity createBlockEntity(BlockView world) {
         return new VoidBlockEntity();
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer,
+            ItemStack itemStack) {
+        if (placer != null && placer.isSneaking()) {
+            world.setBlockState(pos, state.with(VoidBlock.ACTIVATED, true));
+        }
     }
 
     @Override
