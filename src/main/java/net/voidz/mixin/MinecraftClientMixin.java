@@ -33,7 +33,7 @@ public class MinecraftClientMixin {
     @Inject(method = "getMusicType", at = @At(value = "HEAD"), cancellable = true)
     public void getMusicTypeMixin(CallbackInfoReturnable<MusicSound> info) {
         if (this.player != null && this.player.world.getRegistryKey() == DimensionInit.VOID_WORLD) {
-            info.setReturnValue(MusicType.END);
+            info.setReturnValue(MusicType.DRAGON);
         }
 
     }
