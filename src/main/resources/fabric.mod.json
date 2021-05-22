@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "net.voidz.VoidMain"
+    ],
+    "client": [
+      "net.voidz.VoidClient"
     ]
   },
   "mixins": [
