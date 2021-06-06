@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "voidz",
-  "version": "1.0.0",
+  "version": "${version}",
   "name": "VoidZ",
   "description": "Void addon for the AdventureZ mod",
   "authors": [
