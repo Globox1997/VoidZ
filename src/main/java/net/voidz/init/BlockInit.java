@@ -24,7 +24,7 @@ public class BlockInit {
         public static void init() {
                 // Block
                 Registry.register(Registry.ITEM, new Identifier("voidz", "void_portal"),
-                                new BlockItem(PORTAL_BLOCK, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS)));
+                                new BlockItem(PORTAL_BLOCK, new Item.Settings()));
                 Registry.register(Registry.BLOCK, new Identifier("voidz", "void_portal"), PORTAL_BLOCK);
                 Registry.register(Registry.ITEM, new Identifier("voidz", "void"),
                                 new BlockItem(VOID_BLOCK, new Item.Settings().group(ItemGroup.BUILDING_BLOCKS)));
