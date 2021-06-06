@@ -3,10 +3,14 @@ package net.voidz.dimension;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.StructureAccessor;
@@ -14,7 +18,9 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.StructuresConfig;
 import net.minecraft.world.gen.chunk.VerticalBlockSample;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class VoidChunkGenerator extends ChunkGenerator {
@@ -53,5 +59,11 @@ public class VoidChunkGenerator extends ChunkGenerator {
 	@Override
 	public BlockView getColumnSample(int x, int z) {
 		return new VerticalBlockSample(new BlockState[0]);
+	}
+
+	@Override
+	public List<SpawnSettings.SpawnEntry> getEntitySpawnList(Biome biome, StructureAccessor accessor, SpawnGroup group,
+			BlockPos pos) {
+		return new ArrayList<SpawnSettings.SpawnEntry>();
 	}
 }
