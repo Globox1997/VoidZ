@@ -33,12 +33,9 @@ dependencies {
 		exclude(module:"VoidZ")
   	}
 	//DisableCustomWorldsAdvice
-	modCompile 'com.github.rdvdev2:DisableCustomWorldsAdvice:v1.2', {
+	modImplementation include ('com.github.rdvdev2:DisableCustomWorldsAdvice:v1.2'), {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	include 'com.github.rdvdev2:DisableCustomWorldsAdvice:v1.2', {
-    	exclude(group: "net.fabricmc.fabric-api")
-  	}
 }
 
 processResources {
