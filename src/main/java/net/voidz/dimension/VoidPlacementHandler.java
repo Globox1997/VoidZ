@@ -27,10 +27,6 @@ public class VoidPlacementHandler {
 	private static BlockPos enterVoid(ServerWorld serverWorld, BlockPos portalPos) {
 		BlockPos spawnPos = new BlockPos(portalPos.getX(), 100, portalPos.getZ());
 		spawnVoidPlatform(serverWorld, spawnPos.down());
-		VoidShadowEntity voidShadowEntity = (VoidShadowEntity) EntityInit.VOID_SHADOW_ENTITY.create((World) serverWorld);
-		voidShadowEntity.setVoidMiddle(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
-		((Entity) voidShadowEntity).refreshPositionAndAngles(spawnPos.up().north(40), 0.0F, 0.0F);
-		((ServerWorld) serverWorld).spawnEntity(voidShadowEntity);
 		return spawnPos;
 	}
 
@@ -48,7 +44,11 @@ public class VoidPlacementHandler {
 			}
 			// Pretty good centered
 			world.setBlockState(pos, BlockInit.PORTAL_BLOCK.getDefaultState());
-
+			BlockPos spawnPos = pos.up();
+			VoidShadowEntity voidShadowEntity = (VoidShadowEntity) EntityInit.VOID_SHADOW_ENTITY.create((World) world);
+			voidShadowEntity.setVoidMiddle(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+			((Entity) voidShadowEntity).refreshPositionAndAngles(spawnPos.up().north(40), 0.0F, 0.0F);
+			((ServerWorld) world).spawnEntity(voidShadowEntity);
 		}
 	}
 }
