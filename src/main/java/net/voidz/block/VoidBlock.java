@@ -17,7 +17,6 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.voidz.block.entity.VoidBlockEntity;
 
@@ -28,18 +27,16 @@ public class VoidBlock extends Block implements BlockEntityProvider {
 
     public VoidBlock(Settings settings) {
         super(settings);
-        this.setDefaultState((BlockState) ((BlockState) this.stateManager.getDefaultState()).with(ACTIVATED, false)
-                .with(DESTROYTIME, 0));
+        this.setDefaultState((BlockState) ((BlockState) this.stateManager.getDefaultState()).with(ACTIVATED, false).with(DESTROYTIME, 0));
     }
 
     @Override
-    public BlockEntity createBlockEntity(BlockView world) {
-        return new VoidBlockEntity();
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new VoidBlockEntity(pos, state);
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer,
-            ItemStack itemStack) {
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         if (placer != null && placer.isSneaking()) {
             world.setBlockState(pos, state.with(VoidBlock.ACTIVATED, true));
         }
@@ -54,8 +51,7 @@ public class VoidBlock extends Block implements BlockEntityProvider {
     @Environment(EnvType.CLIENT)
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (random.nextInt(10) == 0) {
-            world.addParticle(ParticleTypes.PORTAL, (double) pos.getX() + random.nextDouble(),
-                    (double) pos.getY() + 1.08D, (double) pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
+            world.addParticle(ParticleTypes.PORTAL, (double) pos.getX() + random.nextDouble(), (double) pos.getY() + 1.08D, (double) pos.getZ() + random.nextDouble(), 0.0D, 0.0D, 0.0D);
         }
     }
 

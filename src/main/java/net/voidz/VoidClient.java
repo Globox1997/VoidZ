@@ -10,8 +10,6 @@ public class VoidClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockEntityRendererRegistry.INSTANCE.register(BlockInit.PORTAL_BLOCK_ENTITY, PortalBlockEntityRenderer::new);
-        // BlockRenderLayerMap.INSTANCE.putBlock(BlockInit.PIGLIN_FLAG_BLOCK,
-        // RenderLayer.getCutout());
     }
 
 }

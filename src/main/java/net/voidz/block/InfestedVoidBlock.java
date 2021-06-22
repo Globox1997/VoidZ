@@ -22,14 +22,13 @@ public class InfestedVoidBlock extends Block {
     @Environment(EnvType.CLIENT)
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (random.nextInt(10) == 0) {
-            world.addParticle(ParticleTypes.PORTAL, (double) pos.getX() + random.nextDouble(),
-                    (double) pos.getY() + 1.0D + (random.nextDouble() / 10D), (double) pos.getZ() + random.nextDouble(),
+            world.addParticle(ParticleTypes.PORTAL, (double) pos.getX() + random.nextDouble(), (double) pos.getY() + 1.0D + (random.nextDouble() / 10D), (double) pos.getZ() + random.nextDouble(),
                     0.0D, 0.0D, 0.0D);
         }
     }
 
     @Override
-    public void onSteppedOn(World world, BlockPos pos, Entity entity) {
+    public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
         if (!world.isClient && entity instanceof PlayerEntity) {
             if (world.random.nextInt(12) == 0) {
                 ((PlayerEntity) entity).damage(new DamageSource("void"), 2);

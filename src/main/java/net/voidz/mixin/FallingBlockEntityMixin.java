@@ -31,9 +31,7 @@ public abstract class FallingBlockEntityMixin extends Entity {
         Block block = this.block.getBlock();
         if (block == BlockInit.VOID_BLOCK) {
             if (!this.world.isClient) {
-                this.world.playSound(null, this.getBlockPos(), SoundInit.ROCK_IMPACT_EVENT, SoundCategory.BLOCKS, 0.7F,
-                        0.5F + (this.world.random.nextFloat() / 2.0F));
-
+                this.world.playSound(null, this.getBlockPos(), SoundInit.ROCK_IMPACT_EVENT, SoundCategory.BLOCKS, 0.7F, 0.5F + (this.world.random.nextFloat() / 2.0F));
             }
         }
 

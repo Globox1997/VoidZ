@@ -9,6 +9,8 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
@@ -18,50 +20,58 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.voidz.block.entity.PortalBlockEntity;
 import net.voidz.dimension.VoidPlacementHandler;
+import net.voidz.init.BlockInit;
 import net.voidz.init.DimensionInit;
+import org.jetbrains.annotations.Nullable;
 
 public class PortalBlock extends Block implements BlockEntityProvider {
-	public PortalBlock() {
-		super(Settings.of(Material.AIR));
-	}
+    public PortalBlock() {
+        super(Settings.of(Material.AIR));
+    }
 
-	@Override
-	public BlockEntity createBlockEntity(BlockView world) {
-		return new PortalBlockEntity();
-	}
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new PortalBlockEntity(pos, state);
+    }
 
-	@Override
-	public ActionResult onUse(BlockState stateBlock, World world, BlockPos blockPos, PlayerEntity playerEntity,
-			Hand hand, BlockHitResult blockHitResult) {
-		if (!world.isClient) {
-			ServerWorld serverWorld = (ServerWorld) playerEntity.getEntityWorld();
-			if (serverWorld.getRegistryKey() == DimensionInit.VOID_WORLD) {
-				Box box = new Box(blockPos);
-				List<VoidShadowEntity> list = world.getEntitiesByClass(VoidShadowEntity.class, box.expand(160D),
-						EntityPredicates.EXCEPT_SPECTATOR);
-				if (!playerEntity.isCreative() && !playerEntity.isSpectator() && !list.isEmpty()) {
-					playerEntity.sendMessage(
-							new LiteralText(
-									"Void Shadow: You can't escape the depths of this world as long as I am alive!"),
-							false);
-					return ActionResult.FAIL;
-				}
-				ServerWorld overworld = serverWorld.getServer().getWorld(World.OVERWORLD);
-				FabricDimensions.teleport(playerEntity, overworld, VoidPlacementHandler.leave(overworld, blockPos));
-			} else {
-				ServerWorld voidWorld = serverWorld.getServer().getWorld(DimensionInit.VOID_WORLD);
-				if (voidWorld == null) {
-					playerEntity.sendMessage(new LiteralText("Failed to find void world, was it registered?"), false);
-					return ActionResult.FAIL;
-				}
-				FabricDimensions.teleport(playerEntity, voidWorld, VoidPlacementHandler.enter(voidWorld, blockPos));
-			}
-		}
-		return ActionResult.SUCCESS;
-	}
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return checkType(type, BlockInit.PORTAL_BLOCK_ENTITY, world.isClient ? PortalBlockEntity::clientTick : PortalBlockEntity::serverTick);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState stateBlock, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
+        if (!world.isClient) {
+            ServerWorld serverWorld = (ServerWorld) playerEntity.getEntityWorld();
+            if (serverWorld.getRegistryKey() == DimensionInit.VOID_WORLD) {
+                Box box = new Box(blockPos);
+                List<VoidShadowEntity> list = world.getEntitiesByClass(VoidShadowEntity.class, box.expand(160D), EntityPredicates.EXCEPT_SPECTATOR);
+                if (!playerEntity.isCreative() && !playerEntity.isSpectator() && !list.isEmpty()) {
+                    playerEntity.sendMessage(new LiteralText("Void Shadow: You can't escape the depths of this world as long as I am alive!"), false);
+                    return ActionResult.FAIL;
+                }
+                ServerWorld overworld = serverWorld.getServer().getWorld(World.OVERWORLD);
+                FabricDimensions.teleport(playerEntity, overworld, VoidPlacementHandler.leave(overworld, blockPos));
+            } else {
+                ServerWorld voidWorld = serverWorld.getServer().getWorld(DimensionInit.VOID_WORLD);
+                if (voidWorld == null) {
+                    playerEntity.sendMessage(new LiteralText("Failed to find void world, was it registered?"), false);
+                    return ActionResult.FAIL;
+                }
+                System.out.println(voidWorld + "::" + serverWorld.getRegistryKey() + "::" + serverWorld.getServer().getWorld(World.END));
+                FabricDimensions.teleport(playerEntity, voidWorld, VoidPlacementHandler.enter(voidWorld, blockPos));
+            }
+        }
+        return ActionResult.SUCCESS;
+    }
+
+    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType,
+            BlockEntityTicker<? super E> ticker) {
+        return expectedType == givenType ? (BlockEntityTicker<A>) ticker : null;
+    }
 
 }
