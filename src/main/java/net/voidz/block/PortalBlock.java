@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PortalBlock extends Block implements BlockEntityProvider {
     public PortalBlock() {
-        super(Settings.of(Material.AIR));
+        super(Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing());
     }
 
     @Override
