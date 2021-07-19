@@ -27,7 +27,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// AdventureZ
-	modImplementation("com.github.Globox1997:AdventureZ:9cf584dd13") {
+	modImplementation("com.github.Globox1997:AdventureZ:10bfe8c653") {
     	exclude(group: "net.fabricmc.fabric-api")
 		exclude(group: "vazkii.patchouli")
 		exclude(group: "io.github.prospector")
