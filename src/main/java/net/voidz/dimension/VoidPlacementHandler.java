@@ -10,9 +10,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
-import net.voidz.block.entity.PortalBlockEntity;
 import net.voidz.init.BlockInit;
-import net.voidz.init.ConfigInit;
 
 public class VoidPlacementHandler {
     public static TeleportTarget enter(ServerWorld serverWorld, final BlockPos portalPos) {
@@ -47,17 +45,10 @@ public class VoidPlacementHandler {
             // Pretty good centered
             world.setBlockState(pos, BlockInit.PORTAL_BLOCK.getDefaultState());
             spawnVoidBoss((ServerWorld) world, pos.up());
-        } else {
-            PortalBlockEntity portalBlockEntity = (PortalBlockEntity) world.getBlockEntity(pos);
-            int bossTimed = portalBlockEntity.bossTime;
-            if (ConfigInit.CONFIG.allow_boss_respawn && portalBlockEntity != null && bossTimed != 0 && (int) world.getLevelProperties().getTime() > bossTimed + ConfigInit.CONFIG.boss_respawn_time) {
-                portalBlockEntity.bossTime = 0;
-                spawnVoidBoss((ServerWorld) world, pos.up());
-            }
         }
     }
 
-    private static void spawnVoidBoss(ServerWorld world, BlockPos spawnPos) {
+    public static void spawnVoidBoss(ServerWorld world, BlockPos spawnPos) {
         VoidShadowEntity voidShadowEntity = (VoidShadowEntity) EntityInit.VOID_SHADOW_ENTITY.create((World) world);
         voidShadowEntity.setVoidMiddle(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
         ((Entity) voidShadowEntity).refreshPositionAndAngles(spawnPos.up().north(40), 0.0F, 0.0F);

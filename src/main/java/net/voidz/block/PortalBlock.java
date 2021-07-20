@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.voidz.block.entity.PortalBlockEntity;
 import net.voidz.dimension.VoidPlacementHandler;
 import net.voidz.init.BlockInit;
+import net.voidz.init.ConfigInit;
 import net.voidz.init.DimensionInit;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +55,13 @@ public class PortalBlock extends Block implements BlockEntityProvider {
                     playerEntity.sendMessage(new LiteralText("Void Shadow: You can't escape the depths of this world as long as I am alive!"), false);
                     return ActionResult.FAIL;
                 }
+                if (ConfigInit.CONFIG.allow_boss_respawn && list.isEmpty()) {
+                    PortalBlockEntity portalBlockEntity = (PortalBlockEntity) world.getBlockEntity(blockPos);
+                    if (portalBlockEntity != null && portalBlockEntity.bossTime != 0) {
+                        int timer = ConfigInit.CONFIG.boss_respawn_time - ((int) world.getLevelProperties().getTime() - portalBlockEntity.bossTime);
+                        playerEntity.sendMessage(new LiteralText("The Void Shadow will respawn in " + timer + " ticks"), false);
+                    }
+                }
                 ServerWorld overworld = serverWorld.getServer().getWorld(World.OVERWORLD);
                 FabricDimensions.teleport(playerEntity, overworld, VoidPlacementHandler.leave(overworld, blockPos));
             } else {
@@ -62,7 +70,6 @@ public class PortalBlock extends Block implements BlockEntityProvider {
                     playerEntity.sendMessage(new LiteralText("Failed to find void world, was it registered?"), false);
                     return ActionResult.FAIL;
                 }
-                System.out.println(voidWorld + "::" + serverWorld.getRegistryKey() + "::" + serverWorld.getServer().getWorld(World.END));
                 FabricDimensions.teleport(playerEntity, voidWorld, VoidPlacementHandler.enter(voidWorld, blockPos));
             }
         }
