@@ -18,6 +18,7 @@ repositories {
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url 'https://jitpack.io' }
 	maven { url "https://www.cursemaven.com" }
+	maven { url "https://raw.githubusercontent.com/TerraformersMC/Archive/main/releases/" }
 }
 
 dependencies {
@@ -35,6 +36,10 @@ dependencies {
   	}
 	// DisableCustomWorldsAdvice
 	modImplementation include('curse.maven:fabric-disable-custom-worlds-advice-401978:3346861'),{
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	// Modmenu
+	modCompileOnly modRuntime("com.terraformersmc:modmenu:${project.mod_menu_version}"),{
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 }
