@@ -2,6 +2,8 @@ package net.voidz.dimension;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.minecraft.class_6748;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.structure.StructureManager;
@@ -14,8 +16,12 @@ import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.SpawnSettings;
+import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.biome.source.util.MultiNoiseUtil;
+import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.GenerationStep.Carver;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.StructuresConfig;
@@ -47,11 +53,11 @@ public class VoidChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void buildSurface(ChunkRegion region, Chunk chunk) {
+    public void buildSurface(ChunkRegion chunkRegion, StructureAccessor structureAccessor, Chunk chunk) {
     }
 
     @Override
-    public CompletableFuture<Chunk> populateNoise(Executor executor, StructureAccessor accessor, Chunk chunk) {
+    public CompletableFuture<Chunk> populateNoise(Executor executor, class_6748 var2, StructureAccessor structureAccessor, Chunk chunk) {
         return CompletableFuture.completedFuture(chunk);
     }
 
@@ -70,7 +76,7 @@ public class VoidChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void generateFeatures(ChunkRegion region, StructureAccessor accessor) {
+    public void generateFeatures(StructureWorldAccess world, Chunk chunk, StructureAccessor structureAccessor) {
     }
 
     @Override
@@ -84,6 +90,30 @@ public class VoidChunkGenerator extends ChunkGenerator {
     @Override
     public Pool<SpawnSettings.SpawnEntry> getEntitySpawnList(Biome biome, StructureAccessor accessor, SpawnGroup group, BlockPos pos) {
         return Pool.of(new ArrayList<SpawnSettings.SpawnEntry>());
+    }
+
+    @Override
+    public MultiNoiseSampler getMultiNoiseSampler() {
+        return (i, j, k) -> MultiNoiseUtil.createNoiseValuePoint(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    }
+
+    @Override
+    public void carve(ChunkRegion var1, long var2, BiomeAccess var4, StructureAccessor var5, Chunk var6, Carver var7) {
+    }
+
+    @Override
+    public int getWorldHeight() {
+        return 64;
+    }
+
+    @Override
+    public int getSeaLevel() {
+        return 0;
+    }
+
+    @Override
+    public int getMinimumY() {
+        return 0;
     }
 
 }

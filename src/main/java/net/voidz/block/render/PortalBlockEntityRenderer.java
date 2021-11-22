@@ -22,7 +22,7 @@ public class PortalBlockEntityRenderer<T extends PortalBlockEntity> implements B
 
     @Override
     public void render(T portalBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j) {
-        Matrix4f matrix4f = matrixStack.peek().getModel();
+        Matrix4f matrix4f = matrixStack.peek().getPositionMatrix();
         this.renderSides(portalBlockEntity, matrix4f, vertexConsumerProvider.getBuffer(RenderLayer.getEndPortal()));
     }
 

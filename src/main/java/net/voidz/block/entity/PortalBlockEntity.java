@@ -39,10 +39,9 @@ public class PortalBlockEntity extends BlockEntity {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt) {
+    public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putInt("Boss_Killed_Time", bossTime);
-        return nbt;
     }
 
     private void update() {

@@ -7,11 +7,11 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.voidz.block.misc.InfestedDamageSource;
 
 public class InfestedVoidBlock extends Block {
 
@@ -31,7 +31,7 @@ public class InfestedVoidBlock extends Block {
     public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity) {
         if (!world.isClient && entity instanceof PlayerEntity) {
             if (world.random.nextInt(12) == 0) {
-                ((PlayerEntity) entity).damage(new DamageSource("void"), 2);
+                ((PlayerEntity) entity).damage(new InfestedDamageSource("void"), 2);
             }
         }
     }
