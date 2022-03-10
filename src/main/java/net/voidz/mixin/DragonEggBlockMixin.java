@@ -25,9 +25,8 @@ public class DragonEggBlockMixin {
         if (!world.isClient && world.getRegistryKey() == DimensionInit.VOID_WORLD) {
             world.removeBlock(pos, false);
             ItemStack itemStack = new ItemStack(Items.DRAGON_EGG);
-            if (!player.getInventory().insertStack(itemStack)) {
+            if (!player.getInventory().insertStack(itemStack))
                 player.dropItem(itemStack, false);
-            }
             info.setReturnValue(ActionResult.success(world.isClient));
         }
     }

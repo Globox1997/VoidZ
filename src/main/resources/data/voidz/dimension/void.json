@@ -1,12 +1,6 @@
 {
   "generator": {
-    "type": "voidz:void",
-    "seed": 0,
-    "biome_source": {
-      "seed": 0,
-      "type": "minecraft:fixed",
-      "biome": "minecraft:plains"
-    }
+    "type": "voidz:void"
   },
   "type": "voidz:void_type"
 }

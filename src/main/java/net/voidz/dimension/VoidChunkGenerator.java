@@ -6,40 +6,48 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.structure.StructureManager;
+import net.minecraft.structure.StructureSet;
 import net.minecraft.util.collection.Pool;
+import net.minecraft.util.dynamic.RegistryOps;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.DynamicRegistryManager;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.registry.RegistryEntryList;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.biome.source.BiomeAccess;
-import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.biome.source.FixedBiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
-import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.gen.GenerationStep.Carver;
+import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.Blender;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.StructuresConfig;
 import net.minecraft.world.gen.chunk.VerticalBlockSample;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
 public class VoidChunkGenerator extends ChunkGenerator {
 
-    public static final Codec<VoidChunkGenerator> CODEC = RecordCodecBuilder
-            .create((instance) -> instance.group(BiomeSource.CODEC.fieldOf("biome_source").forGetter((generator) -> generator.biomeSource)).apply(instance, instance.stable(VoidChunkGenerator::new)));
+    public static final Codec<VoidChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> method_41042(instance)
+            .and(RegistryOps.createRegistryCodec(Registry.BIOME_KEY).forGetter((generator) -> generator.biomeRegistry)).apply(instance, instance.stable(VoidChunkGenerator::new)));
 
-    public VoidChunkGenerator(BiomeSource biomeSource) {
-        super(biomeSource, new StructuresConfig(Optional.empty(), Collections.emptyMap()));
+    private final Registry<Biome> biomeRegistry;
+
+    public VoidChunkGenerator(Registry<StructureSet> registry, Registry<Biome> biomeRegistry) {
+        super(registry, Optional.of(RegistryEntryList.of(Collections.emptyList())), new FixedBiomeSource(biomeRegistry.getOrCreateEntry(BiomeKeys.PLAINS)));
+        this.biomeRegistry = biomeRegistry;
     }
 
     @Override
@@ -88,22 +96,22 @@ public class VoidChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public Pool<SpawnSettings.SpawnEntry> getEntitySpawnList(Biome biome, StructureAccessor accessor, SpawnGroup group, BlockPos pos) {
+    public Pool<SpawnSettings.SpawnEntry> getEntitySpawnList(RegistryEntry<Biome> biome, StructureAccessor accessor, SpawnGroup group, BlockPos pos) {
         return Pool.of(new ArrayList<SpawnSettings.SpawnEntry>());
     }
 
     @Override
-    public MultiNoiseSampler getMultiNoiseSampler() {
-        return (i, j, k) -> MultiNoiseUtil.createNoiseValuePoint(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+    public MultiNoiseUtil.MultiNoiseSampler getMultiNoiseSampler() {
+        return MultiNoiseUtil.method_40443();
     }
 
     @Override
-    public void carve(ChunkRegion var1, long var2, BiomeAccess var4, StructureAccessor var5, Chunk var6, Carver var7) {
+    public void carve(ChunkRegion chunkRegion, long l, BiomeAccess biomeAccess, StructureAccessor structureAccessor, Chunk chunk, GenerationStep.Carver carver) {
     }
 
     @Override
     public int getWorldHeight() {
-        return 64;
+        return 256;
     }
 
     @Override
@@ -114,6 +122,10 @@ public class VoidChunkGenerator extends ChunkGenerator {
     @Override
     public int getMinimumY() {
         return 0;
+    }
+
+    @Override
+    public void getDebugHudText(List<String> var1, BlockPos var2) {
     }
 
 }
