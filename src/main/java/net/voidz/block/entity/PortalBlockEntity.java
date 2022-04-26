@@ -35,13 +35,13 @@ public class PortalBlockEntity extends BlockEntity {
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
-        bossTime = nbt.getInt("Boss_Killed_Time");
+        this.bossTime = nbt.getInt("VoidShadowKilledTime");
     }
 
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        nbt.putInt("Boss_Killed_Time", bossTime);
+        nbt.putInt("VoidShadowKilledTime", bossTime);
     }
 
     private void update() {
@@ -55,7 +55,7 @@ public class PortalBlockEntity extends BlockEntity {
         } else {
             spawnTicker++;
             if (spawnTicker % 100 == 0) {
-                if (ConfigInit.CONFIG.allow_boss_respawn && this != null && this.bossTime != 0 && world.getRegistryKey() == DimensionInit.VOID_WORLD
+                if (this != null && ConfigInit.CONFIG.allow_boss_respawn && this.bossTime != 0 && world.getRegistryKey() == DimensionInit.VOID_WORLD
                         && (int) world.getLevelProperties().getTime() > this.bossTime + ConfigInit.CONFIG.boss_respawn_time) {
                     ((ServerWorld) world).playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 2.0F, 1.0F);
                     this.bossTime = 0;
