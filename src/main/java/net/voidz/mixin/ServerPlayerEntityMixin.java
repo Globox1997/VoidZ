@@ -1,33 +1,43 @@
 package net.voidz.mixin;
 
-import java.util.Arrays;
+import com.mojang.authlib.GameProfile;
 
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.voidz.access.ServerPlayerAccess;
 
 @Mixin(ServerPlayerEntity.class)
-public class ServerPlayerEntityMixin implements ServerPlayerAccess {
+public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ServerPlayerAccess {
 
-    @Nullable
     private BlockPos voidPortingBlockPos;
+
+    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
+        super(world, pos, yaw, profile);
+    }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void readCustomDataFromNbtMixin(NbtCompound nbt, CallbackInfo info) {
-        int[] coordinateList = nbt.getIntArray("VoidPortingBlockPos");
-        voidPortingBlockPos = new BlockPos(coordinateList[0], coordinateList[1], coordinateList[2]);
+        if (nbt.contains("VoidPortingBlockPosX"))
+            voidPortingBlockPos = new BlockPos(nbt.getInt("VoidPortingBlockPosX"), nbt.getInt("VoidPortingBlockPosY"), nbt.getInt("VoidPortingBlockPosZ"));
+        else if (this.world != null && this.world instanceof ServerWorld)
+            voidPortingBlockPos = ((ServerWorld) this.world).getSpawnPos();
+
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
     private void writeCustomDataToNbtMixin(NbtCompound nbt, CallbackInfo info) {
-        nbt.putIntArray("VoidPortingBlockPos", Arrays.asList(voidPortingBlockPos.getX(), voidPortingBlockPos.getY(), voidPortingBlockPos.getZ()));
+        nbt.putInt("VoidPortingBlockPosX", voidPortingBlockPos.getX());
+        nbt.putInt("VoidPortingBlockPosY", voidPortingBlockPos.getY());
+        nbt.putInt("VoidPortingBlockPosZ", voidPortingBlockPos.getZ());
     }
 
     @Override
@@ -35,7 +45,6 @@ public class ServerPlayerEntityMixin implements ServerPlayerAccess {
         this.voidPortingBlockPos = pos;
     }
 
-    @Nullable
     @Override
     public BlockPos getVoidPortingBlockPos() {
         return voidPortingBlockPos;
