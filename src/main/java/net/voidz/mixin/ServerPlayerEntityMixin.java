@@ -18,7 +18,7 @@ import net.voidz.access.ServerPlayerAccess;
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ServerPlayerAccess {
 
-    private BlockPos voidPortingBlockPos;
+    private BlockPos voidPortingBlockPos = new BlockPos(0, 0, 0);
 
     public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
         super(world, pos, yaw, profile);
