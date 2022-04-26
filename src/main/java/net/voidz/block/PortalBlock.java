@@ -13,6 +13,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
@@ -62,15 +63,18 @@ public class PortalBlock extends Block implements BlockEntityProvider {
                         playerEntity.sendMessage(new LiteralText("The Void Shadow will respawn in " + timer + " ticks"), false);
                     }
                 }
-                ServerWorld overworld = serverWorld.getServer().getWorld(World.OVERWORLD);
-                FabricDimensions.teleport(playerEntity, overworld, VoidPlacementHandler.leave(overworld, blockPos));
+                ServerWorld oldWorld = serverWorld.getServer().getOverworld();
+                if (oldWorld != null) {
+                    FabricDimensions.teleport(playerEntity, oldWorld, VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
+                    return ActionResult.FAIL;
+                }
             } else {
                 ServerWorld voidWorld = serverWorld.getServer().getWorld(DimensionInit.VOID_WORLD);
                 if (voidWorld == null) {
                     playerEntity.sendMessage(new LiteralText("Failed to find void world, was it registered?"), false);
                     return ActionResult.FAIL;
                 }
-                FabricDimensions.teleport(playerEntity, voidWorld, VoidPlacementHandler.enter(voidWorld, blockPos));
+                FabricDimensions.teleport(playerEntity, voidWorld, VoidPlacementHandler.enter((ServerPlayerEntity) playerEntity, voidWorld, blockPos));
             }
         }
         return ActionResult.SUCCESS;

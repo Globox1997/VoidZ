@@ -4,34 +4,27 @@ import net.adventurez.entity.VoidShadowEntity;
 import net.adventurez.init.EntityInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.Heightmap;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+import net.voidz.access.ServerPlayerAccess;
 import net.voidz.init.BlockInit;
 
 public class VoidPlacementHandler {
-    public static TeleportTarget enter(ServerWorld serverWorld, final BlockPos portalPos) {
-        BlockPos pos = enterVoid(serverWorld, portalPos);
-        return new TeleportTarget(Vec3d.of(pos).add(0.5, 0, 0.5), Vec3d.ZERO, 0, 0);
 
+    public static final BlockPos VOID_SPAWN_POS = new BlockPos(0, 100, 0);
+
+    public static TeleportTarget enter(ServerPlayerEntity serverPlayerEntity, ServerWorld serverWorld, final BlockPos portalPos) {
+        ((ServerPlayerAccess) serverPlayerEntity).setVoidPortingBlockPos(portalPos);
+        spawnVoidPlatform(serverWorld, VOID_SPAWN_POS.down());
+        return new TeleportTarget(Vec3d.of(VOID_SPAWN_POS).add(0.5, 0, 0.5), Vec3d.ZERO, 0, 0);
     }
 
-    public static TeleportTarget leave(ServerWorld serverWorld, final BlockPos portalPos) {
-        BlockPos pos = leaveVoid(serverWorld, portalPos);
-        return new TeleportTarget(Vec3d.of(pos).add(0.5, 0, 0.5), Vec3d.ZERO, 0, 0);
-    }
-
-    private static BlockPos enterVoid(ServerWorld serverWorld, BlockPos portalPos) {
-        BlockPos spawnPos = new BlockPos(portalPos.getX(), 100, portalPos.getZ());
-        spawnVoidPlatform(serverWorld, spawnPos.down());
-        return spawnPos;
-    }
-
-    private static BlockPos leaveVoid(ServerWorld serverWorld, BlockPos portalPos) {
-        return serverWorld.getTopPosition(Heightmap.Type.MOTION_BLOCKING, portalPos).up();
+    public static TeleportTarget leave(ServerPlayerEntity serverPlayerEntity, ServerWorld serverWorld, final BlockPos portalPos) {
+        return new TeleportTarget(Vec3d.of(((ServerPlayerAccess) serverPlayerEntity).getVoidPortingBlockPos()).add(0.5, 0, 0.5), Vec3d.ZERO, 0, 0);
     }
 
     private static void spawnVoidPlatform(World world, BlockPos pos) {
