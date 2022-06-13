@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '0.11-SNAPSHOT'
+	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -24,16 +24,12 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// AdventureZ
-	modImplementation("com.github.Globox1997:AdventureZ:1.18-SNAPSHOT") {
+	modImplementation("com.github.Globox1997:AdventureZ:1.19-SNAPSHOT") {
     	exclude(group: "net.fabricmc.fabric-api")
 		exclude(group: "vazkii.patchouli")
 		exclude(group: "io.github.prospector")
 		exclude(module:"VoidZ")
   	}
-	// DisableCustomWorldsAdvice
-	// modImplementation include('curse.maven:fabric-disable-custom-worlds-advice-401978:3346861'),{
-	// 	exclude(group: "net.fabricmc.fabric-api")
-	// }
 	// Modmenu
 	modCompileOnly modRuntimeOnly("com.terraformersmc:modmenu:${project.mod_menu_version}"),{
 		exclude(group: "net.fabricmc.fabric-api")

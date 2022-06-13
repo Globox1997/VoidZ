@@ -15,7 +15,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -53,14 +53,14 @@ public class PortalBlock extends Block implements BlockEntityProvider {
                 Box box = new Box(blockPos);
                 List<VoidShadowEntity> list = world.getEntitiesByClass(VoidShadowEntity.class, box.expand(160D), EntityPredicates.EXCEPT_SPECTATOR);
                 if (!playerEntity.isCreative() && !playerEntity.isSpectator() && !list.isEmpty()) {
-                    playerEntity.sendMessage(new LiteralText("Void Shadow: You can't escape the depths of this world as long as I am alive!"), false);
+                    playerEntity.sendMessage(Text.literal("Void Shadow: You can't escape the depths of this world as long as I am alive!"), false);
                     return ActionResult.FAIL;
                 }
                 if (ConfigInit.CONFIG.allow_boss_respawn && list.isEmpty()) {
                     PortalBlockEntity portalBlockEntity = (PortalBlockEntity) world.getBlockEntity(blockPos);
                     if (portalBlockEntity != null && portalBlockEntity.bossTime != 0) {
                         int timer = ConfigInit.CONFIG.boss_respawn_time - ((int) world.getLevelProperties().getTime() - portalBlockEntity.bossTime);
-                        playerEntity.sendMessage(new LiteralText("The Void Shadow will respawn in " + timer + " ticks"), false);
+                        playerEntity.sendMessage(Text.literal("The Void Shadow will respawn in " + timer + " ticks"), false);
                     }
                 }
                 ServerWorld oldWorld = serverWorld.getServer().getOverworld();
@@ -71,7 +71,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
             } else {
                 ServerWorld voidWorld = serverWorld.getServer().getWorld(DimensionInit.VOID_WORLD);
                 if (voidWorld == null) {
-                    playerEntity.sendMessage(new LiteralText("Failed to find void world, was it registered?"), false);
+                    playerEntity.sendMessage(Text.literal("Failed to find void world, was it registered?"), false);
                     return ActionResult.FAIL;
                 }
                 FabricDimensions.teleport(playerEntity, voidWorld, VoidPlacementHandler.enter((ServerPlayerEntity) playerEntity, voidWorld, blockPos));
@@ -80,6 +80,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
         return ActionResult.SUCCESS;
     }
 
+    @SuppressWarnings("unchecked")
     protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType,
             BlockEntityTicker<? super E> ticker) {
         return expectedType == givenType ? (BlockEntityTicker<A>) ticker : null;
