@@ -1,0 +1,11 @@
+{
+  "block.voidz.void_portal": "Портал пустоты",
+  "block.voidz.void": "Пустота",
+  "block.voidz.infested_void": "Зараженная пустота",
+
+  "death.attack.void": "%1$s был поглощен пустотой",
+
+  "text.autoconfig.voidz.title": "Настройки VoidZ",
+  "text.autoconfig.voidz.option.allow_boss_respawn": "Разрешить возрождение босса",
+  "text.autoconfig.voidz.option.boss_respawn_time": "Время возрождения босса"
+}
