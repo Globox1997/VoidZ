@@ -29,13 +29,20 @@
     "voidz.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.14.6",
-    "fabric": "*",
-    "minecraft": "1.19.x",
     "java": ">=17",
+    "minecraft": "${minecraft_version}",
+    "fabric-api": ">=${fabric_version}",
+    "fabricloader": ">=${loader_version}",
+    "cloth-config2": ">=${cloth_config_version}",
     "adventurez": "*"
   },
   "suggests": {
     "another-mod": "*"
+  },
+  "custom": {
+    "mc-publish": {
+      "modrinth": "OMiCHIwt",
+      "curseforge": 486971
+    }
   }
 }

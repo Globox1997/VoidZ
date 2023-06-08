@@ -34,19 +34,21 @@ public class MinecraftClientMixin {
 
     @Inject(method = "getMusicType", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getBlockPos()Lnet/minecraft/util/math/BlockPos;"), cancellable = true)
     public void getMusicTypeMixin(CallbackInfoReturnable<MusicSound> info) {
-        if (this.player.world.getRegistryKey() == DimensionInit.VOID_WORLD)
+        if (this.player.getWorld().getRegistryKey() == DimensionInit.VOID_WORLD) {
             info.setReturnValue(MusicType.DRAGON);
+        }
     }
 
     @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getCount()I"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
     private void doItemUseMixin(CallbackInfo info, Hand[] var1, int var2, int var3, Hand hand, ItemStack itemStack) {
-        if (player != null && !player.isCreative() && itemStack.getItem() instanceof BlockItem && player.world.getRegistryKey() == DimensionInit.VOID_WORLD)
+        if (player != null && !player.isCreative() && itemStack.getItem() instanceof BlockItem && player.getWorld().getRegistryKey() == DimensionInit.VOID_WORLD) {
             info.cancel();
+        }
     }
 
     @Inject(method = "handleBlockBreaking", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/hit/BlockHitResult;getSide()Lnet/minecraft/util/math/Direction;"), cancellable = true)
     private void handleBlockBreakingMixin(boolean bl, CallbackInfo info) {
-        if (player != null && !player.isCreative() && player.world.getRegistryKey() == DimensionInit.VOID_WORLD) {
+        if (player != null && !player.isCreative() && player.getWorld().getRegistryKey() == DimensionInit.VOID_WORLD) {
             interactionManager.cancelBlockBreaking();
             info.cancel();
         }

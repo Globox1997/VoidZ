@@ -3,13 +3,13 @@ package net.voidz.mixin;
 import com.mojang.authlib.GameProfile;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -19,18 +19,19 @@ import net.voidz.access.ServerPlayerAccess;
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity implements ServerPlayerAccess {
 
+    @Unique
     private BlockPos voidPortingBlockPos = new BlockPos(0, 0, 0);
 
-    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, PlayerPublicKey publicKey) {
-        super(world, pos, yaw, gameProfile, publicKey);
+    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
+        super(world, pos, yaw, gameProfile);
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void readCustomDataFromNbtMixin(NbtCompound nbt, CallbackInfo info) {
         if (nbt.contains("VoidPortingBlockPosX"))
             voidPortingBlockPos = new BlockPos(nbt.getInt("VoidPortingBlockPosX"), nbt.getInt("VoidPortingBlockPosY"), nbt.getInt("VoidPortingBlockPosZ"));
-        else if (this.world != null && this.world instanceof ServerWorld)
-            voidPortingBlockPos = ((ServerWorld) this.world).getSpawnPos();
+        else if (this.getWorld() != null && this.getWorld() instanceof ServerWorld)
+            voidPortingBlockPos = ((ServerWorld) this.getWorld()).getSpawnPos();
 
     }
 

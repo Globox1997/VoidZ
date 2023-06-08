@@ -27,7 +27,7 @@ public class VoidBlock extends Block implements BlockEntityProvider {
 
     public VoidBlock(Settings settings) {
         super(settings);
-        this.setDefaultState((BlockState) ((BlockState) this.stateManager.getDefaultState()).with(ACTIVATED, false).with(DESTROYTIME, 0));
+        this.setDefaultState(this.stateManager.getDefaultState().with(ACTIVATED, false).with(DESTROYTIME, 0));
     }
 
     @Override

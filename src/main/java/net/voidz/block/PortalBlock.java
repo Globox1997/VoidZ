@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -30,8 +29,9 @@ import net.voidz.init.DimensionInit;
 import org.jetbrains.annotations.Nullable;
 
 public class PortalBlock extends Block implements BlockEntityProvider {
-    public PortalBlock() {
-        super(Settings.of(Material.STONE).strength(-1.0F, 3600000.0F).dropsNothing());
+
+    public PortalBlock(Settings settings) {
+        super(settings);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, BlockInit.PORTAL_BLOCK_ENTITY, world.isClient ? PortalBlockEntity::clientTick : PortalBlockEntity::serverTick);
+        return checkType(type, BlockInit.PORTAL_BLOCK_ENTITY, world.isClient() ? PortalBlockEntity::clientTick : PortalBlockEntity::serverTick);
     }
 
     @Override

@@ -28,10 +28,10 @@ public abstract class FallingBlockEntityMixin extends Entity {
 
     @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/FallingBlockEntity;destroyedOnLanding:Z"))
     private void tickMixin(CallbackInfo info) {
-        if (!this.world.isClient) {
+        if (!this.getWorld().isClient()) {
             Block block = this.block.getBlock();
             if (block == BlockInit.VOID_BLOCK)
-                this.world.playSound(null, this.getBlockPos(), SoundInit.ROCK_IMPACT_EVENT, SoundCategory.BLOCKS, 0.7F, 0.5F + (this.world.random.nextFloat() / 2.0F));
+                this.getWorld().playSound(null, this.getBlockPos(), SoundInit.ROCK_IMPACT_EVENT, SoundCategory.BLOCKS, 0.7F, 0.5F + (this.getWorld().getRandom().nextFloat() / 2.0F));
         }
     }
 

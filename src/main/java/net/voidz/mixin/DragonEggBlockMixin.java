@@ -22,11 +22,12 @@ public class DragonEggBlockMixin {
 
     @Inject(method = "onUse", at = @At(value = "HEAD"), cancellable = true)
     private void onUseMixin(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-        if (!world.isClient && world.getRegistryKey() == DimensionInit.VOID_WORLD) {
+        if (!world.isClient() && world.getRegistryKey() == DimensionInit.VOID_WORLD) {
             world.removeBlock(pos, false);
             ItemStack itemStack = new ItemStack(Items.DRAGON_EGG);
-            if (!player.getInventory().insertStack(itemStack))
+            if (!player.getInventory().insertStack(itemStack)) {
                 player.dropItem(itemStack, false);
+            }
             info.setReturnValue(ActionResult.success(world.isClient));
         }
     }

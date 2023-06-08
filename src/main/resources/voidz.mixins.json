@@ -10,8 +10,7 @@
     "ServerPlayerEntityMixin"
   ],
   "client": [
-    "client.MinecraftClientMixin",
-    "client.IntegratedServerLoaderMixin"
+    "client.MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
