@@ -33,7 +33,10 @@ public class VoidPlacementHandler {
             BlockState platformBlock = BlockInit.VOID_BLOCK.getDefaultState();
             for (float u = 0.0F; u < Math.PI * 2; u += (float) Math.PI / 256F) {
                 for (int i = 0; i < 40; i++) {
-                    world.setBlockState(pos.add((int) Math.sin(u) * i, 0, (int) Math.cos(u) * i), platformBlock);
+                    BlockPos blockPos = pos.add((int) (Math.sin(u) * i), 0, (int) (Math.cos(u) * i));
+                    if (world.getBlockState(blockPos).isAir()) {
+                        world.setBlockState(blockPos, platformBlock);
+                    }
                 }
             }
             // Pretty good centered
