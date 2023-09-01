@@ -28,10 +28,11 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Se
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void readCustomDataFromNbtMixin(NbtCompound nbt, CallbackInfo info) {
-        if (nbt.contains("VoidPortingBlockPosX"))
+        if (nbt.contains("VoidPortingBlockPosX")) {
             voidPortingBlockPos = new BlockPos(nbt.getInt("VoidPortingBlockPosX"), nbt.getInt("VoidPortingBlockPosY"), nbt.getInt("VoidPortingBlockPosZ"));
-        else if (this.getWorld() != null && this.getWorld() instanceof ServerWorld)
+        } else if (this.getWorld() != null && this.getWorld() instanceof ServerWorld) {
             voidPortingBlockPos = ((ServerWorld) this.getWorld()).getSpawnPos();
+        }
 
     }
 
