@@ -1,6 +1,6 @@
 ### Added:
 - 
 ### Fixed:
-- 
+- Fixed elytra flight in void
 ### Changed:
-- Updated to mc 1.20.1
+- 
