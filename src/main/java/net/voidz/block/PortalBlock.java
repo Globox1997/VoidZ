@@ -2,6 +2,7 @@ package net.voidz.block;
 
 import java.util.List;
 
+import net.adventurez.entity.DragonEntity;
 import net.adventurez.entity.VoidShadowEntity;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.Block;
@@ -65,6 +66,12 @@ public class PortalBlock extends Block implements BlockEntityProvider {
                 }
                 ServerWorld oldWorld = serverWorld.getServer().getOverworld();
                 if (oldWorld != null) {
+                    if (playerEntity.hasVehicle() && playerEntity.getVehicle() instanceof DragonEntity && playerEntity.canUsePortals()) {
+                        DragonEntity dragonEntity = (DragonEntity) playerEntity.getVehicle();
+                        playerEntity.stopRiding();
+                        FabricDimensions.teleport(dragonEntity, oldWorld, VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
+                        return ActionResult.SUCCESS;
+                    }
                     FabricDimensions.teleport(playerEntity, oldWorld, VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
                     return ActionResult.FAIL;
                 }
