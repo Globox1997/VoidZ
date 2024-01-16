@@ -3,6 +3,7 @@ package net.voidz.dimension;
 import net.adventurez.entity.VoidShadowEntity;
 import net.adventurez.init.EntityInit;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -46,7 +47,8 @@ public class VoidPlacementHandler {
     public static void spawnVoidBoss(ServerWorld world, BlockPos spawnPos) {
         VoidShadowEntity voidShadowEntity = EntityInit.VOID_SHADOW.create(world);
         voidShadowEntity.setVoidMiddle(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
-        voidShadowEntity.refreshPositionAndAngles(spawnPos.up().north(40), 0.0F, 0.0F);
+        // Cast is required for compat
+        ((Entity) voidShadowEntity).refreshPositionAndAngles(spawnPos.up().north(40), 0.0F, 0.0F);
         world.spawnEntity(voidShadowEntity);
     }
 }
