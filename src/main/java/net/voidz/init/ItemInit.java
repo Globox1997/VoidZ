@@ -16,6 +16,6 @@ public class ItemInit {
 
     public static void init() {
         Registry.register(Registries.ITEM_GROUP, VOIDZ_ITEM_GROUP,
-                FabricItemGroup.builder().icon(() -> new ItemStack(BlockInit.INFESTED_VOID_BLOCK)).displayName(Text.translatable("block.voidz.item_group")).build());
+                FabricItemGroup.builder().icon(() -> new ItemStack(BlockInit.INFESTED_VOID)).displayName(Text.translatable("block.voidz.item_group")).build());
     }
 }

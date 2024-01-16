@@ -20,12 +20,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.voidz.block.entity.VoidBlockEntity;
 
-public class VoidBlock extends Block implements BlockEntityProvider {
+public class VoidStoneBlock extends Block implements BlockEntityProvider {
 
     public static final BooleanProperty ACTIVATED;
     public static final IntProperty DESTROYTIME;
 
-    public VoidBlock(Settings settings) {
+    public VoidStoneBlock(Settings settings) {
         super(settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(ACTIVATED, false).with(DESTROYTIME, 0));
     }
@@ -38,7 +38,7 @@ public class VoidBlock extends Block implements BlockEntityProvider {
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         if (placer != null && placer.isSneaking()) {
-            world.setBlockState(pos, state.with(VoidBlock.ACTIVATED, true));
+            world.setBlockState(pos, state.with(VoidStoneBlock.ACTIVATED, true));
         }
     }
 

@@ -1,6 +1,6 @@
 {
     "parent": "block/cube_all",
     "textures": {
-        "all": "voidz:block/activated_void_5"
+        "all": "voidz:block/activated_void_stone_2"
     }
 }

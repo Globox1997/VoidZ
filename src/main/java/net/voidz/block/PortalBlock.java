@@ -48,7 +48,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
 
     @Override
     public ActionResult onUse(BlockState stateBlock, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
-        if (!world.isClient) {
+        if (!world.isClient()) {
             ServerWorld serverWorld = (ServerWorld) playerEntity.getEntityWorld();
             if (serverWorld.getRegistryKey() == DimensionInit.VOID_WORLD) {
                 Box box = new Box(blockPos);

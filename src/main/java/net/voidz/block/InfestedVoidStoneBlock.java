@@ -14,9 +14,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.voidz.init.BlockInit;
 
-public class InfestedVoidBlock extends Block {
+public class InfestedVoidStoneBlock extends Block {
 
-    public InfestedVoidBlock(Settings settings) {
+    public InfestedVoidStoneBlock(Settings settings) {
         super(settings);
     }
 

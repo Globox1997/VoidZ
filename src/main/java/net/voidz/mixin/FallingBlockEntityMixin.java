@@ -30,7 +30,7 @@ public abstract class FallingBlockEntityMixin extends Entity {
     private void tickMixin(CallbackInfo info) {
         if (!this.getWorld().isClient()) {
             Block block = this.block.getBlock();
-            if (block == BlockInit.VOID_BLOCK) {
+            if (block == BlockInit.VOID_STONE) {
                 this.getWorld().playSound(null, this.getBlockPos(), SoundInit.ROCK_IMPACT_EVENT, SoundCategory.BLOCKS, 0.7F, 0.5F + (this.getWorld().getRandom().nextFloat() / 2.0F));
             }
         }

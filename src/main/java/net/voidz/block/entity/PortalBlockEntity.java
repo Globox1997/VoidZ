@@ -41,25 +41,25 @@ public class PortalBlockEntity extends BlockEntity {
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
-        nbt.putInt("VoidShadowKilledTime", bossTime);
+        nbt.putInt("VoidShadowKilledTime", this.bossTime);
     }
 
     private void update() {
-        if (this.world.isClient) {
-            particleTicker += (float) Math.PI / 128F;
+        if (this.world.isClient()) {
+            this.particleTicker += (float) Math.PI / 128F;
             double angle = 2 * Math.PI * particleTicker;
             this.world.addParticle(ParticleTypes.PORTAL, (double) this.getPos().getX() + 0.5F + 1.5F * Math.sin(angle), (double) this.getPos().getY() + 0.5F + Math.sin(angle) / 2.0F,
                     (double) this.getPos().getZ() + 0.5F + 1.5F * Math.cos(angle), 0.0D, 0.0D, 0.0D);
             this.world.addParticle(ParticleTypes.PORTAL, (double) this.getPos().getX() + 0.5F + 1.5F * Math.sin(angle), (double) this.getPos().getY() + 0.5F + Math.sin(angle + Math.PI) / 2.0F,
                     (double) this.getPos().getZ() + 0.5F + 1.5F * Math.cos(angle), 0.0D, 0.0D, 0.0D);
         } else {
-            spawnTicker++;
-            if (spawnTicker % 100 == 0) {
-                if (this != null && ConfigInit.CONFIG.allow_boss_respawn && this.bossTime != 0 && world.getRegistryKey() == DimensionInit.VOID_WORLD
-                        && (int) world.getLevelProperties().getTime() > this.bossTime + ConfigInit.CONFIG.boss_respawn_time) {
-                    ((ServerWorld) world).playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 2.0F, 1.0F);
+            this.spawnTicker++;
+            if (this.spawnTicker % 100 == 0) {
+                if (this != null && ConfigInit.CONFIG.allow_boss_respawn && this.bossTime != 0 && this.world.getRegistryKey() == DimensionInit.VOID_WORLD
+                        && (int) this.world.getLevelProperties().getTime() > this.bossTime + ConfigInit.CONFIG.boss_respawn_time) {
+                    ((ServerWorld) this.world).playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_WITHER_SPAWN, SoundCategory.HOSTILE, 2.0F, 1.0F);
                     this.bossTime = 0;
-                    VoidPlacementHandler.spawnVoidBoss((ServerWorld) world, pos.up());
+                    VoidPlacementHandler.spawnVoidBoss((ServerWorld) this.world, pos.up());
                 }
             }
         }

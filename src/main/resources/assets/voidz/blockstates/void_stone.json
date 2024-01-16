@@ -1,0 +1,31 @@
+{
+    "variants": {
+        "activated_void=false": {
+            "model": "voidz:block/void_stone"
+        },
+        "activated_void=true,destroy_time=0": {
+            "model": "voidz:block/activated_void_stone_0"
+        },
+        "activated_void=true,destroy_time=1": {
+            "model": "voidz:block/activated_void_stone_1"
+        },
+        "activated_void=true,destroy_time=2": {
+            "model": "voidz:block/activated_void_stone_2"
+        },
+        "activated_void=true,destroy_time=3": {
+            "model": "voidz:block/activated_void_stone_3"
+        },
+        "activated_void=true,destroy_time=4": {
+            "model": "voidz:block/activated_void_stone_4"
+        },
+        "activated_void=true,destroy_time=5": {
+            "model": "voidz:block/activated_void_stone_5"
+        },
+        "activated_void=true,destroy_time=6": {
+            "model": "voidz:block/activated_void_stone_6"
+        },
+        "activated_void=true,destroy_time=7": {
+            "model": "voidz:block/activated_void_stone_7"
+        }
+    }
+}

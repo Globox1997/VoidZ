@@ -29,8 +29,8 @@ public class VoidPlacementHandler {
 
     private static void spawnVoidPlatform(World world, BlockPos pos) {
         // Check if already exist
-        if (world.getBlockState(pos).getBlock() != BlockInit.PORTAL_BLOCK) {
-            BlockState platformBlock = BlockInit.VOID_BLOCK.getDefaultState();
+        if (world.getBlockState(pos).getBlock() != BlockInit.PORTAL) {
+            BlockState platformBlock = BlockInit.VOID_STONE.getDefaultState();
             for (float u = 0.0F; u < Math.PI * 2; u += (float) Math.PI / 256F) {
                 for (int i = 0; i < 40; i++) {
                     BlockPos blockPos = pos.add((int) (Math.sin(u) * i), 0, (int) (Math.cos(u) * i));
@@ -40,7 +40,7 @@ public class VoidPlacementHandler {
                 }
             }
             // Pretty good centered
-            world.setBlockState(pos, BlockInit.PORTAL_BLOCK.getDefaultState());
+            world.setBlockState(pos, BlockInit.PORTAL.getDefaultState());
             spawnVoidBoss((ServerWorld) world, pos.up());
         }
     }
