@@ -3,13 +3,11 @@ package net.voidz.dimension;
 import net.adventurez.entity.VoidShadowEntity;
 import net.adventurez.init.EntityInit;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
-import net.minecraft.world.World;
 import net.voidz.access.ServerPlayerAccess;
 import net.voidz.init.BlockInit;
 
@@ -24,10 +22,10 @@ public class VoidPlacementHandler {
     }
 
     public static TeleportTarget leave(ServerPlayerEntity serverPlayerEntity, ServerWorld serverWorld, final BlockPos portalPos) {
-        return new TeleportTarget(Vec3d.of(((ServerPlayerAccess) serverPlayerEntity).getVoidPortingBlockPos()).add(0.5, 0, 0.5), Vec3d.ZERO, serverWorld.random.nextFloat() * 360F, 0);
+        return new TeleportTarget(Vec3d.of(((ServerPlayerAccess) serverPlayerEntity).getVoidPortingBlockPos()).add(0.5, 0, 0.5), Vec3d.ZERO, serverWorld.getRandom().nextFloat() * 360F, 0);
     }
 
-    private static void spawnVoidPlatform(World world, BlockPos pos) {
+    private static void spawnVoidPlatform(ServerWorld world, BlockPos pos) {
         // Check if already exist
         if (world.getBlockState(pos).getBlock() != BlockInit.PORTAL) {
             BlockState platformBlock = BlockInit.VOID_STONE.getDefaultState();
@@ -41,14 +39,14 @@ public class VoidPlacementHandler {
             }
             // Pretty good centered
             world.setBlockState(pos, BlockInit.PORTAL.getDefaultState());
-            spawnVoidBoss((ServerWorld) world, pos.up());
+            spawnVoidBoss(world, pos.up());
         }
     }
 
     public static void spawnVoidBoss(ServerWorld world, BlockPos spawnPos) {
-        VoidShadowEntity voidShadowEntity = (VoidShadowEntity) EntityInit.VOID_SHADOW_ENTITY.create((World) world);
+        VoidShadowEntity voidShadowEntity = EntityInit.VOID_SHADOW.create(world);
         voidShadowEntity.setVoidMiddle(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
-        ((Entity) voidShadowEntity).refreshPositionAndAngles(spawnPos.up().north(40), 0.0F, 0.0F);
-        ((ServerWorld) world).spawnEntity(voidShadowEntity);
+        voidShadowEntity.refreshPositionAndAngles(spawnPos.up().north(40), 0.0F, 0.0F);
+        world.spawnEntity(voidShadowEntity);
     }
 }
