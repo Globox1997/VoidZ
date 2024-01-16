@@ -18,7 +18,7 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.voidz.block.entity.VoidBlockEntity;
+import net.voidz.block.entity.VoidStoneBlockEntity;
 
 public class VoidStoneBlock extends Block implements BlockEntityProvider {
 
@@ -32,7 +32,7 @@ public class VoidStoneBlock extends Block implements BlockEntityProvider {
 
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new VoidBlockEntity(pos, state);
+        return new VoidStoneBlockEntity(pos, state);
     }
 
     @Override

@@ -6,10 +6,10 @@ import net.minecraft.util.math.BlockPos;
 import net.voidz.block.VoidStoneBlock;
 import net.voidz.init.BlockInit;
 
-public class VoidBlockEntity extends BlockEntity {
+public class VoidStoneBlockEntity extends BlockEntity {
     private int ticker;
 
-    public VoidBlockEntity(BlockPos pos, BlockState state) {
+    public VoidStoneBlockEntity(BlockPos pos, BlockState state) {
         super(BlockInit.VOID_BLOCK_ENTITY, pos, state);
     }
 
