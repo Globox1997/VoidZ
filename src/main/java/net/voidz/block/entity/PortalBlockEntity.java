@@ -1,20 +1,21 @@
 package net.voidz.block.entity;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.EndPortalBlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.voidz.dimension.VoidPlacementHandler;
 import net.voidz.init.BlockInit;
 import net.voidz.init.ConfigInit;
 import net.voidz.init.DimensionInit;
 
-public class PortalBlockEntity extends BlockEntity {
+public class PortalBlockEntity extends EndPortalBlockEntity {
 
     private float particleTicker;
     private int spawnTicker;
@@ -42,6 +43,11 @@ public class PortalBlockEntity extends BlockEntity {
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putInt("VoidShadowKilledTime", this.bossTime);
+    }
+
+    @Override
+    public boolean shouldDrawSide(Direction direction) {
+        return true;
     }
 
     private void update() {
