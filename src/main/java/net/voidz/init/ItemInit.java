@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 
 public class ItemInit {
     // Item Group
-    public static final RegistryKey<ItemGroup> VOIDZ_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier("voidz", "item_group"));
+    public static final RegistryKey<ItemGroup> VOIDZ_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of("voidz", "item_group"));
 
     public static void init() {
         Registry.register(Registries.ITEM_GROUP, VOIDZ_ITEM_GROUP,

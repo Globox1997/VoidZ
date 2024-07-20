@@ -11,11 +11,11 @@ import net.voidz.dimension.VoidChunkGenerator;
 
 public class DimensionInit {
 
-    public static final RegistryKey<World> VOID_WORLD = RegistryKey.of(RegistryKeys.WORLD, new Identifier("voidz", "void"));
-    public static final RegistryKey<DimensionType> VOID_DIMENSION_TYPE_KEY = RegistryKey.of(RegistryKeys.DIMENSION_TYPE, new Identifier("voidz", "void"));
+    public static final RegistryKey<World> VOID_WORLD = RegistryKey.of(RegistryKeys.WORLD, Identifier.of("voidz", "void"));
+    public static final RegistryKey<DimensionType> VOID_DIMENSION_TYPE_KEY = RegistryKey.of(RegistryKeys.DIMENSION_TYPE, Identifier.of("voidz", "void"));
 
     public static void init() {
-        Registry.register(Registries.CHUNK_GENERATOR, new Identifier("voidz", "void"), VoidChunkGenerator.CODEC);
+        Registry.register(Registries.CHUNK_GENERATOR, Identifier.of("voidz", "void"), VoidChunkGenerator.CODEC);
     }
 
 }

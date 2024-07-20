@@ -14,10 +14,10 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.client.sound.MusicType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.MusicSound;
+import net.minecraft.sound.MusicType;
 import net.minecraft.util.Hand;
 import net.voidz.init.DimensionInit;
 

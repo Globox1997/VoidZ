@@ -1,6 +1,6 @@
 package net.voidz.dimension;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.block.BlockState;
@@ -32,19 +32,18 @@ import net.minecraft.world.gen.noise.NoiseConfig;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
 
 public class VoidChunkGenerator extends ChunkGenerator {
 
-    public static final Codec<VoidChunkGenerator> CODEC = RecordCodecBuilder
-            .create(instance -> instance.group(RegistryOps.getEntryCodec(BiomeKeys.PLAINS)).apply(instance, instance.stable(VoidChunkGenerator::new)));
+    public static final MapCodec<VoidChunkGenerator> CODEC = RecordCodecBuilder
+            .mapCodec(instance -> instance.group(RegistryOps.getEntryCodec(BiomeKeys.PLAINS)).apply(instance, instance.stable(VoidChunkGenerator::new)));
 
     public VoidChunkGenerator(RegistryEntry.Reference<Biome> biomeEntry) {
         super(new FixedBiomeSource(biomeEntry));
     }
 
     @Override
-    protected Codec<? extends ChunkGenerator> getCodec() {
+    protected MapCodec<? extends ChunkGenerator> getCodec() {
         return CODEC;
     }
 
@@ -94,7 +93,7 @@ public class VoidChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public CompletableFuture<Chunk> populateNoise(Executor executor, Blender blender, NoiseConfig noiseConfig, StructureAccessor structureAccessor, Chunk chunk) {
+    public CompletableFuture<Chunk> populateNoise(Blender blender, NoiseConfig noiseConfig, StructureAccessor structureAccessor, Chunk chunk) {
         return CompletableFuture.completedFuture(chunk);
     }
 

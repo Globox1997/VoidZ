@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.adventurez.entity.DragonEntity;
 import net.adventurez.entity.VoidShadowEntity;
-import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -17,7 +16,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -47,7 +45,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
-    public ActionResult onUse(BlockState stateBlock, World world, BlockPos blockPos, PlayerEntity playerEntity, Hand hand, BlockHitResult blockHitResult) {
+    public ActionResult onUse(BlockState stateBlock, World world, BlockPos blockPos, PlayerEntity playerEntity, BlockHitResult blockHitResult) {
         if (!world.isClient()) {
             ServerWorld serverWorld = (ServerWorld) playerEntity.getEntityWorld();
             if (serverWorld.getRegistryKey() == DimensionInit.VOID_WORLD) {
@@ -66,13 +64,12 @@ public class PortalBlock extends Block implements BlockEntityProvider {
                 }
                 ServerWorld oldWorld = serverWorld.getServer().getOverworld();
                 if (oldWorld != null) {
-                    if (playerEntity.hasVehicle() && playerEntity.getVehicle() instanceof DragonEntity && playerEntity.canUsePortals()) {
-                        DragonEntity dragonEntity = (DragonEntity) playerEntity.getVehicle();
+                    if (playerEntity.hasVehicle() && playerEntity.getVehicle() instanceof DragonEntity dragonEntity && playerEntity.canUsePortals(true)) {
                         playerEntity.stopRiding();
-                        FabricDimensions.teleport(dragonEntity, oldWorld, VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
+                        dragonEntity.teleportTo(VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
                         return ActionResult.SUCCESS;
                     }
-                    FabricDimensions.teleport(playerEntity, oldWorld, VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
+                    playerEntity.teleportTo(VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
                     return ActionResult.FAIL;
                 }
             } else {
@@ -81,7 +78,7 @@ public class PortalBlock extends Block implements BlockEntityProvider {
                     playerEntity.sendMessage(Text.literal("Failed to find void world, was it registered?"), false);
                     return ActionResult.FAIL;
                 }
-                FabricDimensions.teleport(playerEntity, voidWorld, VoidPlacementHandler.enter((ServerPlayerEntity) playerEntity, voidWorld, blockPos));
+                playerEntity.teleportTo(VoidPlacementHandler.enter((ServerPlayerEntity) playerEntity, voidWorld, blockPos));
             }
         }
         return ActionResult.SUCCESS;

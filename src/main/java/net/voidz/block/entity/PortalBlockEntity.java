@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.EndPortalBlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -34,14 +35,14 @@ public class PortalBlockEntity extends EndPortalBlockEntity {
     }
 
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    protected void readNbt(NbtCompound nbt, WrapperLookup registryLookup) {
+        super.readNbt(nbt, registryLookup);
         this.bossTime = nbt.getInt("VoidShadowKilledTime");
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
+    protected void writeNbt(NbtCompound nbt, WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
         nbt.putInt("VoidShadowKilledTime", this.bossTime);
     }
 

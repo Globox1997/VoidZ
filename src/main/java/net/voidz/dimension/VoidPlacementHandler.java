@@ -19,11 +19,12 @@ public class VoidPlacementHandler {
     public static TeleportTarget enter(ServerPlayerEntity serverPlayerEntity, ServerWorld serverWorld, final BlockPos portalPos) {
         ((ServerPlayerAccess) serverPlayerEntity).setVoidPortingBlockPos(serverPlayerEntity.getBlockPos());
         spawnVoidPlatform(serverWorld, VOID_SPAWN_POS.down());
-        return new TeleportTarget(Vec3d.of(VOID_SPAWN_POS).add(0.5, 0, 0.5), Vec3d.ZERO, 0, 0);
+        return new TeleportTarget(serverWorld, Vec3d.of(VOID_SPAWN_POS).add(0.5, 0, 0.5), Vec3d.ZERO, 0, 0, TeleportTarget.NO_OP);
     }
 
     public static TeleportTarget leave(ServerPlayerEntity serverPlayerEntity, ServerWorld serverWorld, final BlockPos portalPos) {
-        return new TeleportTarget(Vec3d.of(((ServerPlayerAccess) serverPlayerEntity).getVoidPortingBlockPos()).add(0.5, 0, 0.5), Vec3d.ZERO, serverWorld.getRandom().nextFloat() * 360F, 0);
+        return new TeleportTarget(serverWorld, Vec3d.of(((ServerPlayerAccess) serverPlayerEntity).getVoidPortingBlockPos()).add(0.5, 0, 0.5), Vec3d.ZERO, serverWorld.getRandom().nextFloat() * 360F,
+                0, TeleportTarget.NO_OP);
     }
 
     private static void spawnVoidPlatform(ServerWorld world, BlockPos pos) {
