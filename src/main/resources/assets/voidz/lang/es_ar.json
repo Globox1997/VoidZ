@@ -1,0 +1,12 @@
+{
+  "block.voidz.item_group": "VoidZ",
+  "block.voidz.void_portal": "Portal del Vacío",
+  "block.voidz.void_stone": "Piedra del Vacío",
+  "block.voidz.infested_void_stone": "Piedra del Vacío Infestada",
+
+  "death.attack.infested": "%1$s fue absorbido por el vacío",
+
+  "text.autoconfig.voidz.title": "Configuración de VoidZ",
+  "text.autoconfig.voidz.option.allow_boss_respawn": "Permitir reaparición del jefe",
+  "text.autoconfig.voidz.option.boss_respawn_time": "Tiempo de reaparición del jefe"
+}
