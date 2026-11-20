@@ -17,7 +17,7 @@ public class ChunkMixin {
 
     @Inject(method = "setBlockEntityNbt", at = @At("HEAD"), cancellable = true)
     private void addPendingBlockEntityNbtMixin(CompoundTag nbt, CallbackInfo info) {
-        if (LEGACY_VOID_STONE_BLOCK_ENTITY.equals(nbt.getString("id"))) {
+        if (LEGACY_VOID_STONE_BLOCK_ENTITY.equals(nbt.getStringOr("id", ""))) {
             info.cancel();
         }
     }

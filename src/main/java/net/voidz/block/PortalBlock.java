@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.voidz.block.entity.PortalBlockEntity;
 import net.voidz.dimension.VoidPlacementHandler;
@@ -48,26 +48,26 @@ public class PortalBlock extends Block implements EntityBlock {
             PortalBlockEntity portalBlockEntity = world.getBlockEntity(blockPos) instanceof PortalBlockEntity portal ? portal : null;
             boolean bossAlive = portalBlockEntity != null && portalBlockEntity.isBossAlive(serverWorld);
             if (bossAlive && !playerEntity.isCreative() && !playerEntity.isSpectator()) {
-                playerEntity.displayClientMessage(Component.translatable("message.voidz.boss_alive"), false);
+                serverPlayerEntity.sendSystemMessage(Component.translatable("message.voidz.boss_alive"));
                 return InteractionResult.FAIL;
             }
             if (portalBlockEntity != null && !bossAlive) {
                 portalBlockEntity.sendRespawnInfo(serverPlayerEntity);
             }
-            DimensionTransition teleportTarget = VoidPlacementHandler.leave(serverPlayerEntity);
+            TeleportTransition teleportTarget = VoidPlacementHandler.leave(serverPlayerEntity);
             if (playerEntity.isPassenger() && playerEntity.getVehicle() instanceof DragonEntity dragonEntity && playerEntity.canUsePortal(true)) {
                 playerEntity.stopRiding();
-                dragonEntity.changeDimension(teleportTarget);
+                dragonEntity.teleport(teleportTarget);
                 return InteractionResult.SUCCESS;
             }
-            playerEntity.changeDimension(teleportTarget);
+            playerEntity.teleport(teleportTarget);
         } else {
             ServerLevel voidWorld = serverWorld.getServer().getLevel(DimensionInit.VOID_WORLD);
             if (voidWorld == null) {
-                playerEntity.displayClientMessage(Component.translatable("message.voidz.missing_void_world"), false);
+                serverPlayerEntity.sendSystemMessage(Component.translatable("message.voidz.missing_void_world"));
                 return InteractionResult.FAIL;
             }
-            playerEntity.changeDimension(VoidPlacementHandler.enter(serverPlayerEntity, voidWorld, blockPos));
+            playerEntity.teleport(VoidPlacementHandler.enter(serverPlayerEntity, voidWorld, blockPos));
         }
         return InteractionResult.SUCCESS;
     }

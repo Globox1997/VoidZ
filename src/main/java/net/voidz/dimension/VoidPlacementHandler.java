@@ -11,10 +11,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
 import net.voidz.access.ServerPlayerAccess;
 import net.voidz.block.entity.PortalBlockEntity;
@@ -27,14 +28,14 @@ public class VoidPlacementHandler {
     private static final int PLATFORM_RADIUS = 40;
     private static final int SAFE_SEARCH_RANGE = 16;
 
-    public static DimensionTransition enter(ServerPlayer serverPlayerEntity, ServerLevel serverWorld, final BlockPos portalPos) {
+    public static TeleportTransition enter(ServerPlayer serverPlayerEntity, ServerLevel serverWorld, final BlockPos portalPos) {
         ((ServerPlayerAccess) serverPlayerEntity).setVoidReturnPos(GlobalPos.of(serverPlayerEntity.level().dimension(), serverPlayerEntity.blockPosition()));
         spawnVoidPlatform(serverWorld, VOID_SPAWN_POS.below());
-        return new DimensionTransition(serverWorld, Vec3.atLowerCornerOf(VOID_SPAWN_POS).add(0.5, 0, 0.5), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING);
+        return new TeleportTransition(serverWorld, Vec3.atLowerCornerOf(VOID_SPAWN_POS).add(0.5, 0, 0.5), Vec3.ZERO, 0, 0, TeleportTransition.DO_NOTHING);
     }
 
-    public static DimensionTransition leave(ServerPlayer serverPlayerEntity) {
-        MinecraftServer server = serverPlayerEntity.getServer();
+    public static TeleportTransition leave(ServerPlayer serverPlayerEntity) {
+        MinecraftServer server = serverPlayerEntity.level().getServer();
         GlobalPos returnPos = ((ServerPlayerAccess) serverPlayerEntity).getVoidReturnPos();
 
         ServerLevel targetWorld = null;
@@ -47,13 +48,13 @@ public class VoidPlacementHandler {
         }
         if (targetPos == null) {
             targetWorld = server.overworld();
-            BlockPos spawnPos = targetWorld.getSharedSpawnPos();
+            BlockPos spawnPos = targetWorld.getRespawnData().pos();
             targetPos = findSafePos(targetWorld, spawnPos);
             if (targetPos == null) {
                 targetPos = targetWorld.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, spawnPos);
             }
         }
-        return new DimensionTransition(targetWorld, Vec3.atLowerCornerOf(targetPos).add(0.5, 0, 0.5), Vec3.ZERO, targetWorld.getRandom().nextFloat() * 360F, 0, DimensionTransition.DO_NOTHING);
+        return new TeleportTransition(targetWorld, Vec3.atLowerCornerOf(targetPos).add(0.5, 0, 0.5), Vec3.ZERO, targetWorld.getRandom().nextFloat() * 360F, 0, TeleportTransition.DO_NOTHING);
     }
 
     @Nullable
@@ -74,7 +75,7 @@ public class VoidPlacementHandler {
     }
 
     private static boolean isSafe(ServerLevel world, BlockPos pos) {
-        if (pos.getY() <= world.getMinBuildHeight() || pos.getY() + 1 >= world.getMaxBuildHeight()) {
+        if (pos.getY() <= world.getMinY() || pos.getY() + 1 > world.getMaxY()) {
             return false;
         }
         BlockPos headPos = pos.above();
@@ -111,13 +112,13 @@ public class VoidPlacementHandler {
 
     @Nullable
     public static VoidShadowEntity spawnVoidBoss(ServerLevel world, BlockPos spawnPos) {
-        VoidShadowEntity voidShadowEntity = EntityInit.VOID_SHADOW.create(world);
+        VoidShadowEntity voidShadowEntity = EntityInit.VOID_SHADOW.create(world, EntitySpawnReason.MOB_SUMMONED);
         if (voidShadowEntity == null) {
             return null;
         }
         voidShadowEntity.setVoidMiddle(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
         // Cast is required for compat
-        ((Entity) voidShadowEntity).moveTo(spawnPos.above().north(40), 0.0F, 0.0F);
+        ((Entity) voidShadowEntity).snapTo(spawnPos.above().north(40), 0.0F, 0.0F);
         return world.addFreshEntity(voidShadowEntity) ? voidShadowEntity : null;
     }
 }

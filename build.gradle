@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.17-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -10,6 +10,14 @@ version = project.mod_version
 group = project.maven_group
 
 repositories {
+	exclusiveContent {
+		forRepository {
+			mavenLocal()
+		}
+		filter {
+			includeGroup("net.adventurez")
+		}
+	}
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url 'https://jitpack.io' }
 	maven { url "https://api.modrinth.com/maven" }
@@ -18,27 +26,20 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Config
-	modImplementation ("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
-    	exclude(group: "net.fabricmc.fabric-api")
-  	}
-	// Modmenu
-	modCompileOnly("com.terraformersmc:modmenu:${project.mod_menu_version}") {
+	implementation("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	modRuntimeOnly("com.terraformersmc:modmenu:${project.mod_menu_version}") {
+	// Modmenu
+	compileOnly localRuntime("com.terraformersmc:modmenu:${project.mod_menu_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	// AdventureZ
-	modImplementation ('maven.modrinth:adventurez:1.5.3+1.21.1') {
+	implementation("net.adventurez:adventurez-fabric:${project.adventurez_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
-		exclude(group: "vazkii.patchouli")
-		exclude(group: "io.github.prospector")
-		exclude(module:"VoidZ")
 	}
 }
 
@@ -49,14 +50,13 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.encoding = "UTF-8"
+	it.options.release = Integer.parseInt(project.java_version)
 }
 
 java {
+	toolchain.languageVersion = JavaLanguageVersion.of(project.java_version)
 	withSourcesJar()
-
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -71,7 +71,7 @@ publishing {
 			from components.java
 		}
 	}
-	
+
 	repositories {
 	}
 }

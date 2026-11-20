@@ -22,7 +22,7 @@ public class MinecraftClientMixin {
     @Nullable
     public LocalPlayer player;
 
-    @Inject(method = "getSituationalMusic", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;blockPosition()Lnet/minecraft/core/BlockPos;"), cancellable = true)
+    @Inject(method = "getSituationalMusic", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;dimension()Lnet/minecraft/resources/ResourceKey;", ordinal = 0), cancellable = true)
     public void getMusicTypeMixin(CallbackInfoReturnable<Music> info) {
         if (this.player.level().dimension() == DimensionInit.VOID_WORLD) {
             info.setReturnValue(Musics.END_BOSS);

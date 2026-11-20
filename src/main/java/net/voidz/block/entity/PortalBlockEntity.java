@@ -9,6 +9,7 @@ import net.adventurez.entity.VoidShadowEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -27,6 +28,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.TheEndPortalBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.voidz.dimension.VoidPlacementHandler;
 import net.voidz.init.BlockInit;
@@ -65,23 +68,19 @@ public class PortalBlockEntity extends TheEndPortalBlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag nbt, Provider registryLookup) {
-        super.loadAdditional(nbt, registryLookup);
-        this.bossTime = nbt.getInt(BOSS_TIME_KEY);
+    protected void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        this.bossTime = input.getIntOr(BOSS_TIME_KEY, 0);
         this.syncedBossTime = this.bossTime;
-        this.bossUuid = nbt.hasUUID(BOSS_UUID_KEY) ? nbt.getUUID(BOSS_UUID_KEY) : null;
-        if (nbt.contains(RESPAWN_DELAY_KEY)) {
-            this.respawnDelay = nbt.getInt(RESPAWN_DELAY_KEY);
-        }
+        this.bossUuid = input.read(BOSS_UUID_KEY, UUIDUtil.CODEC).orElse(null);
+        input.getInt(RESPAWN_DELAY_KEY).ifPresent(delay -> this.respawnDelay = delay);
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt, Provider registryLookup) {
-        super.saveAdditional(nbt, registryLookup);
-        nbt.putInt(BOSS_TIME_KEY, this.bossTime);
-        if (this.bossUuid != null) {
-            nbt.putUUID(BOSS_UUID_KEY, this.bossUuid);
-        }
+    protected void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        output.putInt(BOSS_TIME_KEY, this.bossTime);
+        output.storeNullable(BOSS_UUID_KEY, UUIDUtil.CODEC, this.bossUuid);
     }
 
     @Override
@@ -134,9 +133,9 @@ public class PortalBlockEntity extends TheEndPortalBlockEntity {
         }
         int remaining = delay - ticksSinceBossDeath();
         if (remaining > 0) {
-            player.displayClientMessage(Component.translatable("message.voidz.boss_respawn", formatTicks(remaining)), false);
+            player.sendSystemMessage(Component.translatable("message.voidz.boss_respawn", formatTicks(remaining)));
         } else {
-            player.displayClientMessage(Component.translatable("message.voidz.boss_respawn_soon"), false);
+            player.sendSystemMessage(Component.translatable("message.voidz.boss_respawn_soon"));
         }
     }
 

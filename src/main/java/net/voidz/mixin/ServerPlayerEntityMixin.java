@@ -10,11 +10,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.voidz.access.ServerPlayerAccess;
 
 @Mixin(ServerPlayer.class)
@@ -29,25 +29,22 @@ public abstract class ServerPlayerEntityMixin extends Player implements ServerPl
     @Nullable
     private GlobalPos voidReturnPos;
 
-    public ServerPlayerEntityMixin(Level world, BlockPos pos, float yaw, GameProfile gameProfile) {
-        super(world, pos, yaw, gameProfile);
+    public ServerPlayerEntityMixin(Level world, GameProfile gameProfile) {
+        super(world, gameProfile);
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void readCustomDataFromNbtMixin(CompoundTag nbt, CallbackInfo info) {
-        if (nbt.contains(VOID_RETURN_POS_KEY)) {
-            this.voidReturnPos = GlobalPos.CODEC.parse(NbtOps.INSTANCE, nbt.get(VOID_RETURN_POS_KEY)).result().orElse(null);
-        } else if (nbt.contains(LEGACY_POS_KEY + "X")) {
-            BlockPos legacyPos = new BlockPos(nbt.getInt(LEGACY_POS_KEY + "X"), nbt.getInt(LEGACY_POS_KEY + "Y"), nbt.getInt(LEGACY_POS_KEY + "Z"));
+    private void readCustomDataFromNbtMixin(ValueInput input, CallbackInfo info) {
+        this.voidReturnPos = input.read(VOID_RETURN_POS_KEY, GlobalPos.CODEC).orElse(null);
+        if (this.voidReturnPos == null && input.getInt(LEGACY_POS_KEY + "X").isPresent()) {
+            BlockPos legacyPos = new BlockPos(input.getIntOr(LEGACY_POS_KEY + "X", 0), input.getIntOr(LEGACY_POS_KEY + "Y", 0), input.getIntOr(LEGACY_POS_KEY + "Z", 0));
             this.voidReturnPos = legacyPos.equals(BlockPos.ZERO) ? null : GlobalPos.of(Level.OVERWORLD, legacyPos);
         }
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void writeCustomDataToNbtMixin(CompoundTag nbt, CallbackInfo info) {
-        if (this.voidReturnPos != null) {
-            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.voidReturnPos).result().ifPresent(element -> nbt.put(VOID_RETURN_POS_KEY, element));
-        }
+    private void writeCustomDataToNbtMixin(ValueOutput output, CallbackInfo info) {
+        output.storeNullable(VOID_RETURN_POS_KEY, GlobalPos.CODEC, this.voidReturnPos);
     }
 
     @Inject(method = "restoreFrom", at = @At("TAIL"))

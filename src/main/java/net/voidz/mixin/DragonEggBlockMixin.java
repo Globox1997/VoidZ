@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.At;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -24,9 +25,9 @@ public class DragonEggBlockMixin {
             world.removeBlock(pos, false);
             ItemStack itemStack = new ItemStack(Items.DRAGON_EGG);
             if (!player.getInventory().add(itemStack)) {
-                player.drop(itemStack, false);
+                player.drop(itemStack, false, Prediction.SERVER_ONLY);
             }
-            info.setReturnValue(InteractionResult.sidedSuccess(world.isClientSide));
+            info.setReturnValue(InteractionResult.CONSUME);
         }
     }
 
