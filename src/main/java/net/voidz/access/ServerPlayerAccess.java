@@ -1,8 +1,7 @@
 package net.voidz.access;
 
+import net.minecraft.core.GlobalPos;
 import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.util.math.GlobalPos;
 
 public interface ServerPlayerAccess {
 

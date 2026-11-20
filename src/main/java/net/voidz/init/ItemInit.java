@@ -1,21 +1,21 @@
 package net.voidz.init;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemInit {
     // Item Group
-    public static final RegistryKey<ItemGroup> VOIDZ_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, Identifier.of("voidz", "item_group"));
+    public static final ResourceKey<CreativeModeTab> VOIDZ_ITEM_GROUP = ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath("voidz", "item_group"));
 
     public static void init() {
-        Registry.register(Registries.ITEM_GROUP, VOIDZ_ITEM_GROUP,
-                FabricItemGroup.builder().icon(() -> new ItemStack(BlockInit.INFESTED_VOID)).displayName(Text.translatable("block.voidz.item_group")).build());
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, VOIDZ_ITEM_GROUP,
+                FabricItemGroup.builder().icon(() -> new ItemStack(BlockInit.INFESTED_VOID)).title(Component.translatable("block.voidz.item_group")).build());
     }
 }

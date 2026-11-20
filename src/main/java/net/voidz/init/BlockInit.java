@@ -1,49 +1,49 @@
 package net.voidz.init;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.voidz.block.*;
 import net.voidz.block.entity.*;
 
 public class BlockInit {
     // Block
     public static final Block PORTAL = register("void_portal", new PortalBlock(
-            AbstractBlock.Settings.create().mapColor(MapColor.BLACK).nonOpaque().luminance(state -> 15).strength(-1.0f, 3600000.0f).dropsNothing().pistonBehavior(PistonBehavior.BLOCK)));
-    public static final Block VOID_STONE = register("void_stone", new VoidStoneBlock(AbstractBlock.Settings.copy(Blocks.END_STONE)));
-    public static final Block INFESTED_VOID = register("infested_void_stone", new InfestedVoidStoneBlock(AbstractBlock.Settings.copy(Blocks.END_STONE)));
+            BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK).noOcclusion().lightLevel(state -> 15).strength(-1.0f, 3600000.0f).noLootTable().pushReaction(PushReaction.BLOCK)));
+    public static final Block VOID_STONE = register("void_stone", new VoidStoneBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE)));
+    public static final Block INFESTED_VOID = register("infested_void_stone", new InfestedVoidStoneBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.END_STONE)));
 
     // Entity
     public static BlockEntityType<PortalBlockEntity> PORTAL_BLOCK_ENTITY;
     // Damage Types
-    public static final RegistryKey<DamageType> INFESTED = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of("voidz", "infested"));
+    public static final ResourceKey<DamageType> INFESTED = ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath("voidz", "infested"));
 
     private static Block register(String id, Block block) {
-        return register(Identifier.of("voidz", id), block);
+        return register(ResourceLocation.fromNamespaceAndPath("voidz", id), block);
     }
 
-    private static Block register(Identifier id, Block block) {
-        Item item = Registry.register(Registries.ITEM, id, new BlockItem(block, new Item.Settings()));
-        ItemGroupEvents.modifyEntriesEvent(ItemInit.VOIDZ_ITEM_GROUP).register(entries -> entries.add(item));
+    private static Block register(ResourceLocation id, Block block) {
+        Item item = Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(block, new Item.Properties()));
+        ItemGroupEvents.modifyEntriesEvent(ItemInit.VOIDZ_ITEM_GROUP).register(entries -> entries.accept(item));
 
-        return Registry.register(Registries.BLOCK, id, block);
+        return Registry.register(BuiltInRegistries.BLOCK, id, block);
     }
 
     public static void init() {
         // Entity
-        PORTAL_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, "voidz:void_portal_entity", BlockEntityType.Builder.create(PortalBlockEntity::new, PORTAL).build(null));
+        PORTAL_BLOCK_ENTITY = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, "voidz:void_portal_entity", BlockEntityType.Builder.of(PortalBlockEntity::new, PORTAL).build(null));
     }
 
 }
