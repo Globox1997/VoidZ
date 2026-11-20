@@ -27,7 +27,6 @@ public class BlockInit {
 
     // Entity
     public static BlockEntityType<PortalBlockEntity> PORTAL_BLOCK_ENTITY;
-    public static BlockEntityType<VoidStoneBlockEntity> VOID_BLOCK_ENTITY;
     // Damage Types
     public static final RegistryKey<DamageType> INFESTED = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of("voidz", "infested"));
 
@@ -45,7 +44,6 @@ public class BlockInit {
     public static void init() {
         // Entity
         PORTAL_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, "voidz:void_portal_entity", BlockEntityType.Builder.create(PortalBlockEntity::new, PORTAL).build(null));
-        VOID_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, "voidz:void_block_entity", BlockEntityType.Builder.create(VoidStoneBlockEntity::new, VOID_STONE).build(null));
     }
 
 }
