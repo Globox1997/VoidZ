@@ -7,7 +7,9 @@
     "PlayerEntityMixin",
     "FallingBlockEntityMixin",
     "DragonEggBlockMixin",
-    "ServerPlayerEntityMixin"
+    "ServerPlayerEntityMixin",
+    "BlockItemMixin",
+    "ChunkMixin"
   ],
   "client": [
     "client.MinecraftClientMixin"

@@ -1,5 +1,8 @@
 package net.voidz.init;
 
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -16,6 +19,10 @@ public class DimensionInit {
 
     public static void init() {
         Registry.register(Registries.CHUNK_GENERATOR, Identifier.of("voidz", "void"), VoidChunkGenerator.CODEC);
+    }
+
+    public static boolean isRestricted(@Nullable PlayerEntity player, World world) {
+        return world.getRegistryKey() == VOID_WORLD && (player == null || !player.isCreative());
     }
 
 }
