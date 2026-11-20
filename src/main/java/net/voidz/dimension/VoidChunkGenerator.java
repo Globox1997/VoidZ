@@ -29,7 +29,6 @@ import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.chunk.placement.StructurePlacementCalculator;
 import net.minecraft.world.gen.noise.NoiseConfig;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -37,6 +36,8 @@ public class VoidChunkGenerator extends ChunkGenerator {
 
     public static final MapCodec<VoidChunkGenerator> CODEC = RecordCodecBuilder
             .mapCodec(instance -> instance.group(RegistryOps.getEntryCodec(BiomeKeys.PLAINS)).apply(instance, instance.stable(VoidChunkGenerator::new)));
+
+    private static final Pool<SpawnSettings.SpawnEntry> NO_SPAWNS = Pool.empty();
 
     public VoidChunkGenerator(RegistryEntry.Reference<Biome> biomeEntry) {
         super(new FixedBiomeSource(biomeEntry));
@@ -66,7 +67,7 @@ public class VoidChunkGenerator extends ChunkGenerator {
 
     @Override
     public Pool<SpawnSettings.SpawnEntry> getEntitySpawnList(RegistryEntry<Biome> biome, StructureAccessor accessor, SpawnGroup group, BlockPos pos) {
-        return Pool.of(new ArrayList<SpawnSettings.SpawnEntry>());
+        return NO_SPAWNS;
     }
 
     @Override
@@ -103,8 +104,8 @@ public class VoidChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView var3, NoiseConfig var4) {
-        return new VerticalBlockSample(z, new BlockState[0]);
+    public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView heightLimitView, NoiseConfig noiseConfig) {
+        return new VerticalBlockSample(heightLimitView.getBottomY(), new BlockState[0]);
     }
 
     @Override
