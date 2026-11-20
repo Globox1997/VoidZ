@@ -8,5 +8,10 @@
 
   "text.autoconfig.voidz.title": "VoidZ Config",
   "text.autoconfig.voidz.option.allow_boss_respawn": "Allow Boss Respawn",
-  "text.autoconfig.voidz.option.boss_respawn_time": "Boss Respawn Time"
+  "text.autoconfig.voidz.option.boss_respawn_time": "Boss Respawn Time",
+
+  "message.voidz.boss_alive": "Void Shadow: You can't escape the depths of this world as long as I am alive!",
+  "message.voidz.boss_respawn": "The Void Shadow will respawn in %s",
+  "message.voidz.boss_respawn_soon": "The Void Shadow is about to return...",
+  "message.voidz.missing_void_world": "Failed to find the void world, was it registered?"
 }

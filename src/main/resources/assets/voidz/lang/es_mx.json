@@ -8,5 +8,10 @@
 
   "text.autoconfig.voidz.title": "Configuración de VoidZ",
   "text.autoconfig.voidz.option.allow_boss_respawn": "Permitir Respawn de Jefes",
-  "text.autoconfig.voidz.option.boss_respawn_time": "Tiempo de Respawn de Jefes"
+  "text.autoconfig.voidz.option.boss_respawn_time": "Tiempo de Respawn de Jefes",
+
+  "message.voidz.boss_alive": "Sombra del Vacío: ¡No puedes escapar de las profundidades de este mundo mientras yo siga con vida!",
+  "message.voidz.boss_respawn": "La Sombra del Vacío reaparecerá en %s",
+  "message.voidz.boss_respawn_soon": "La Sombra del Vacío está a punto de regresar...",
+  "message.voidz.missing_void_world": "No se encontró el mundo del vacío, ¿fue registrado?"
 }

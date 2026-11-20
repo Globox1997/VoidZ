@@ -7,5 +7,10 @@
 
   "text.autoconfig.voidz.title": "Настройки VoidZ",
   "text.autoconfig.voidz.option.allow_boss_respawn": "Разрешить возрождение босса",
-  "text.autoconfig.voidz.option.boss_respawn_time": "Время возрождения босса"
+  "text.autoconfig.voidz.option.boss_respawn_time": "Время возрождения босса",
+
+  "message.voidz.boss_alive": "Тень пустоты: Тебе не сбежать из глубин этого мира, пока я жива!",
+  "message.voidz.boss_respawn": "Тень пустоты возродится через %s",
+  "message.voidz.boss_respawn_soon": "Тень пустоты вот-вот вернётся...",
+  "message.voidz.missing_void_world": "Не удалось найти мир пустоты. Он был зарегистрирован?"
 }
