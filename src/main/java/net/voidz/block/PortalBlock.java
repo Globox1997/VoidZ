@@ -1,9 +1,6 @@
 package net.voidz.block;
 
-import java.util.List;
-
 import net.adventurez.entity.DragonEntity;
-import net.adventurez.entity.VoidShadowEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -11,19 +8,17 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import net.voidz.block.entity.PortalBlockEntity;
 import net.voidz.dimension.VoidPlacementHandler;
 import net.voidz.init.BlockInit;
-import net.voidz.init.ConfigInit;
 import net.voidz.init.DimensionInit;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,40 +41,33 @@ public class PortalBlock extends Block implements BlockEntityProvider {
 
     @Override
     public ActionResult onUse(BlockState stateBlock, World world, BlockPos blockPos, PlayerEntity playerEntity, BlockHitResult blockHitResult) {
-        if (!world.isClient()) {
-            ServerWorld serverWorld = (ServerWorld) playerEntity.getEntityWorld();
-            if (serverWorld.getRegistryKey() == DimensionInit.VOID_WORLD) {
-                Box box = new Box(blockPos);
-                List<VoidShadowEntity> list = world.getEntitiesByClass(VoidShadowEntity.class, box.expand(160D), EntityPredicates.EXCEPT_SPECTATOR);
-                if (!playerEntity.isCreative() && !playerEntity.isSpectator() && !list.isEmpty()) {
-                    playerEntity.sendMessage(Text.literal("Void Shadow: You can't escape the depths of this world as long as I am alive!"), false);
-                    return ActionResult.FAIL;
-                }
-                if (ConfigInit.CONFIG.allow_boss_respawn && list.isEmpty()) {
-                    PortalBlockEntity portalBlockEntity = (PortalBlockEntity) world.getBlockEntity(blockPos);
-                    if (portalBlockEntity != null && portalBlockEntity.bossTime != 0) {
-                        int timer = ConfigInit.CONFIG.boss_respawn_time - ((int) world.getLevelProperties().getTime() - portalBlockEntity.bossTime);
-                        playerEntity.sendMessage(Text.literal("The Void Shadow will respawn in " + timer + " ticks"), false);
-                    }
-                }
-                ServerWorld oldWorld = serverWorld.getServer().getOverworld();
-                if (oldWorld != null) {
-                    if (playerEntity.hasVehicle() && playerEntity.getVehicle() instanceof DragonEntity dragonEntity && playerEntity.canUsePortals(true)) {
-                        playerEntity.stopRiding();
-                        dragonEntity.teleportTo(VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
-                        return ActionResult.SUCCESS;
-                    }
-                    playerEntity.teleportTo(VoidPlacementHandler.leave((ServerPlayerEntity) playerEntity, oldWorld, blockPos));
-                    return ActionResult.FAIL;
-                }
-            } else {
-                ServerWorld voidWorld = serverWorld.getServer().getWorld(DimensionInit.VOID_WORLD);
-                if (voidWorld == null) {
-                    playerEntity.sendMessage(Text.literal("Failed to find void world, was it registered?"), false);
-                    return ActionResult.FAIL;
-                }
-                playerEntity.teleportTo(VoidPlacementHandler.enter((ServerPlayerEntity) playerEntity, voidWorld, blockPos));
+        if (world.isClient() || !(world instanceof ServerWorld serverWorld) || !(playerEntity instanceof ServerPlayerEntity serverPlayerEntity)) {
+            return ActionResult.SUCCESS;
+        }
+        if (serverWorld.getRegistryKey() == DimensionInit.VOID_WORLD) {
+            PortalBlockEntity portalBlockEntity = world.getBlockEntity(blockPos) instanceof PortalBlockEntity portal ? portal : null;
+            boolean bossAlive = portalBlockEntity != null && portalBlockEntity.isBossAlive(serverWorld);
+            if (bossAlive && !playerEntity.isCreative() && !playerEntity.isSpectator()) {
+                playerEntity.sendMessage(Text.translatable("message.voidz.boss_alive"), false);
+                return ActionResult.FAIL;
             }
+            if (portalBlockEntity != null && !bossAlive) {
+                portalBlockEntity.sendRespawnInfo(serverPlayerEntity);
+            }
+            TeleportTarget teleportTarget = VoidPlacementHandler.leave(serverPlayerEntity);
+            if (playerEntity.hasVehicle() && playerEntity.getVehicle() instanceof DragonEntity dragonEntity && playerEntity.canUsePortals(true)) {
+                playerEntity.stopRiding();
+                dragonEntity.teleportTo(teleportTarget);
+                return ActionResult.SUCCESS;
+            }
+            playerEntity.teleportTo(teleportTarget);
+        } else {
+            ServerWorld voidWorld = serverWorld.getServer().getWorld(DimensionInit.VOID_WORLD);
+            if (voidWorld == null) {
+                playerEntity.sendMessage(Text.translatable("message.voidz.missing_void_world"), false);
+                return ActionResult.FAIL;
+            }
+            playerEntity.teleportTo(VoidPlacementHandler.enter(serverPlayerEntity, voidWorld, blockPos));
         }
         return ActionResult.SUCCESS;
     }
