@@ -1,10 +1,13 @@
 package net.voidz.access;
 
-import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
+
+import net.minecraft.util.math.GlobalPos;
 
 public interface ServerPlayerAccess {
 
-    public void setVoidPortingBlockPos(BlockPos pos);
+    public void setVoidReturnPos(@Nullable GlobalPos pos);
 
-    public BlockPos getVoidPortingBlockPos();
+    @Nullable
+    public GlobalPos getVoidReturnPos();
 }
