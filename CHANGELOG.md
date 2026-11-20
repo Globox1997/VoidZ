@@ -1,6 +1,8 @@
 ### Added:
-- 
+- Respawn particles
 ### Fixed:
-- 
+- Void stone bug
+- Void stone particles not showing
 ### Changed:
-- Updated to mc 1.21
+- Removed void stone lock entity
+- Tweaked return position
