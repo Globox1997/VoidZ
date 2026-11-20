@@ -1,5 +1,7 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
+        mavenCentral()
         exclusiveContent {
             forRepository {
                 maven {
@@ -11,7 +13,14 @@ pluginManagement {
                 includeGroupAndSubgroups('net.fabricmc')
             }
         }
-        mavenCentral()
-        gradlePluginPortal()
     }
 }
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+rootProject.name = 'VoidZ'
+include('common')
+include('fabric')
+include('neoforge')

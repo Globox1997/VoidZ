@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.voidz.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "PlayerEntityMixin",
+    "FallingBlockEntityMixin",
+    "DragonEggBlockMixin",
+    "ServerPlayerEntityMixin",
+    "BlockItemMixin",
+    "LivingEntityMixin"
+  ],
+  "client": [
+    "client.MinecraftClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

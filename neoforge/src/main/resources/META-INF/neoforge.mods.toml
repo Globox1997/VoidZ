@@ -1,0 +1,44 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "GPLv3"
+issueTrackerURL = "https://github.com/Globox1997/VoidZ/issues"
+
+[[mods]]
+modId = "voidz"
+version = "${version}"
+displayName = "VoidZ"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/voidz"
+iconFile = "assets/voidz/icon.png"
+authors = "Globox_Z"
+description = '''Void addon for the AdventureZ mod'''
+
+[[mixins]]
+config = "voidz.mixins.json"
+
+[[dependencies.voidz]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforge_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.voidz]]
+modId = "minecraft"
+type = "required"
+versionRange = "[${minecraft_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.voidz]]
+modId = "cloth_config"
+type = "required"
+versionRange = "[${cloth_config_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.voidz]]
+modId = "adventurez"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"
